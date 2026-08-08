@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#141210"/><text x="50" y="60" font-family="Antonio, sans-serif" font-size="34" font-weight="600" fill="#a67f10" text-anchor="middle">KO</text></svg></template>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;600;700&amp;family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500;600;700;800&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%" data-uneditable="">
+
+  <section data-label="Cover" style="position:relative;width:100%;height:100%;background-color:#141210;background-image:linear-gradient(90deg, rgba(18,16,14,.94) 0%, rgba(18,16,14,.78) 34%, rgba(18,16,14,.28) 60%, rgba(18,16,14,.42) 100%), url('./cover-bg.png');background-size:cover;background-position:center;color:#faf7f2;font-family:'Inter',sans-serif;padding:110px 120px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;">
+    <div style="position:absolute;left:-140px;top:-140px;width:560px;height:560px;border:1px solid rgba(166,127,16,.35);border-radius:50%;"></div>
+    <div style="position:relative;z-index:1;">
+      <h1 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:118px;line-height:.98;letter-spacing:-.02em;margin:0;">Growth Plan</h1>
+    </div>
+  </section>
+
+  <section data-label="The Problem" style="position:relative;width:100%;height:100%;background:#a67f10;color:#1c1512;font-family:'Inter',sans-serif;padding:100px 120px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:64px;line-height:1.04;letter-spacing:-.015em;margin:0 0 40px;max-width:22ch;">The Problem</h2>
+    <p style="font-size:32px;line-height:1.5;color:rgba(28,21,18,.82);max-width:38ch;margin:0;">The followers are there and engaged. What's missing is desire and incentive — for most of them, buying Kostyle just isn't a priority yet. Give them a reason, and the audience you already have starts converting.</p>
+    <image-slot id="problem-image" shape="rounded" radius="14" placeholder="Drop image here" style="position:absolute;right:120px;top:150px;width:500px;height:600px;z-index:1;"></image-slot>
+  </section>
+
+  <!-- The Goal section removed. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:64px;line-height:1.04;margin:0 0 22px;letter-spacing:-.01em;max-width:24ch;">The Goal</h2>
+    <p style="font-size:32px;color:#5f574e;margin:0 0 60px;max-width:40ch;line-height:1.5;">Not more traffic — more want. Every deliverable in this deck serves one of these three goals.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:44px;">
+      <div style="border-top:3px solid #1c1815;padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:60px;color:#a67f10;line-height:1;">01</div>
+        <div style="font-family:'Antonio',sans-serif;font-size:32px;font-weight:600;margin:18px 0 8px;">Create desire</div>
+        <p style="font-size:32px;color:#5f574e;line-height:1.45;margin:0;">Turn people who like the brand into people who want the piece.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:60px;color:#a67f10;line-height:1;">02</div>
+        <div style="font-family:'Antonio',sans-serif;font-size:32px;font-weight:600;margin:18px 0 8px;">Give a reason to buy now</div>
+        <p style="font-size:32px;color:#5f574e;line-height:1.45;margin:0;">An offer and a moment that make buying a priority, not a maybe.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:60px;color:#a67f10;line-height:1;">03</div>
+        <div style="font-family:'Antonio',sans-serif;font-size:32px;font-weight:600;margin:18px 0 8px;">Turn buyers into repeat buyers</div>
+        <p style="font-size:32px;color:#5f574e;line-height:1.45;margin:0;">Capture every buyer and bring them back so one sale becomes many.</p>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!-- The Audience section removed. -->
+  <!--
+    <image-slot id="audience-image" shape="rect" placeholder="Drop full-bleed audience image here" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;"></image-slot>
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg, rgba(18,16,14,.94) 0%, rgba(18,16,14,.82) 40%, rgba(18,16,14,.3) 72%, rgba(18,16,14,.5) 100%);"></div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;height:100%;">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:64px;line-height:1.04;margin:0 0 22px;letter-spacing:-.01em;max-width:24ch;">The Audience</h2>
+    <p style="font-size:32px;color:#c9c0b5;margin:0 0 52px;max-width:40ch;line-height:1.5;">For a crowd that already follows and likes Kostyle, the job is giving them a clear reason to buy and an easy way to check out.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:44px;margin-top:auto;">
+      <div style="border-top:2px solid rgba(250,247,242,.25);padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:60px;color:#a67f10;line-height:1;">2,000</div>
+        <div style="font-size:32px;color:#c9c0b5;margin-top:14px;line-height:1.45;">Engaged followers already built up and paying attention.</div>
+      </div>
+      <div style="border-top:2px solid rgba(250,247,242,.25);padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:60px;color:#a67f10;line-height:1;">UAE</div>
+        <div style="font-size:32px;color:#c9c0b5;margin-top:14px;line-height:1.45;">Dubai combat-sports and streetwear buyers, reachable and local.</div>
+      </div>
+      <div style="border-top:2px solid rgba(250,247,242,.25);padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:60px;color:#a67f10;line-height:1;">Mobile</div>
+        <div style="font-size:32px;color:#c9c0b5;margin-top:14px;line-height:1.45;">They meet the brand on Instagram and TikTok, and shop from a phone.</div>
+      </div>
+    </div>
+    </div>
+  </section>
+  -->
+
+  <!-- The Insight section removed. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:64px;line-height:1.04;margin:0 0 22px;letter-spacing:-.01em;max-width:24ch;">The Insight</h2>
+    <p style="font-size:32px;color:#5f574e;margin:0 0 52px;max-width:40ch;line-height:1.5;">Dubai and Milan don't buy for the same reasons — and neither buys just because they follow you. Three truths we have to design around.</p>
+    <image-slot id="insight-image" shape="rounded" radius="14" placeholder="Drop image here" style="position:absolute;right:120px;top:110px;width:440px;height:380px;z-index:1;"></image-slot>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:34px;">
+      <div style="border-top:3px solid #1c1815;padding-top:22px;">
+        <div style="font-family:'Antonio',sans-serif;font-style:italic;font-size:26px;color:#a67f10;margin-bottom:10px;">Dubai</div>
+        <div style="font-size:32px;font-weight:600;margin-bottom:8px;">Bought when it's seen</div>
+        <p style="font-size:32px;color:#5f574e;line-height:1.45;margin:0;">They buy what photographs and what someone they follow is already wearing — status and proof, not a spec sheet.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:22px;">
+        <div style="font-family:'Antonio',sans-serif;font-style:italic;font-size:26px;color:#a67f10;margin-bottom:10px;">Milan</div>
+        <div style="font-size:32px;font-weight:600;margin-bottom:8px;">Pays for taste, not hype</div>
+        <p style="font-size:32px;color:#5f574e;line-height:1.45;margin:0;">Happy to spend — but only on fabric, cut and detail that read as considered. Anything that feels fast-fashion is a no.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:22px;">
+        <div style="font-family:'Antonio',sans-serif;font-style:italic;font-size:26px;color:#a67f10;margin-bottom:10px;">Both</div>
+        <div style="font-size:32px;font-weight:600;margin-bottom:8px;">A follow isn't a purchase</div>
+        <p style="font-size:32px;color:#5f574e;line-height:1.45;margin:0;">They like the brand the way they like a feed — passively. Nothing has yet made owning it feel worth the money.</p>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!-- The Campaign / Solution section removed. -->
+  <!--
+    <div style="padding:80px 90px 120px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;">
+      <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:58px;line-height:1.02;margin:0 0 18px;letter-spacing:-.01em;">The Campaign</h2>
+      <p style="font-size:26px;color:#5f574e;margin:0 0 30px;line-height:1.45;">A three-round plan that creates demand, keeps your buyers in your corner, and then scales awareness to a brand people want.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;">
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+          <div style="flex:none;width:46px;height:46px;border-radius:50%;background:#a67f10;color:#141210;font-family:'Antonio',sans-serif;font-weight:600;font-size:22px;display:flex;align-items:center;justify-content:center;">1</div>
+          <div><div style="font-family:'Antonio',sans-serif;font-size:30px;font-weight:600;margin:2px 0 4px;">Find your range</div><p style="font-size:25px;color:#5f574e;line-height:1.4;margin:0;">Spark real desire and give people a reason to buy now.</p></div>
+        </div>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+          <div style="flex:none;width:46px;height:46px;border-radius:50%;background:#a67f10;color:#141210;font-family:'Antonio',sans-serif;font-weight:600;font-size:22px;display:flex;align-items:center;justify-content:center;">2</div>
+          <div><div style="font-family:'Antonio',sans-serif;font-size:30px;font-weight:600;margin:2px 0 4px;">Keep them in your corner</div><p style="font-size:25px;color:#5f574e;line-height:1.4;margin:0;">Grow a list and re-open the buyers you already have.</p></div>
+        </div>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+          <div style="flex:none;width:46px;height:46px;border-radius:50%;background:#a67f10;color:#141210;font-family:'Antonio',sans-serif;font-weight:600;font-size:22px;display:flex;align-items:center;justify-content:center;">3</div>
+          <div><div style="font-family:'Antonio',sans-serif;font-size:30px;font-weight:600;margin:2px 0 4px;">Go the distance</div><p style="font-size:25px;color:#5f574e;line-height:1.4;margin:0;">SEO, PR and community scale reach to a brand people now want.</p></div>
+        </div>
+      </div>
+    </div>
+    <image-slot id="solution-image" shape="rect" placeholder="Drop image here" style="width:100%;height:100%;"></image-slot>
+  </section>
+  -->
+
+  <section data-label="Roadmap" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:64px 120px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:44px;line-height:1;letter-spacing:-.015em;margin:0 0 8px;">The Roadmap</h2>
+    
+    <table style="border-collapse:collapse;font-family:'Inter',sans-serif;width:100%;">
+      
+      <tbody>
+        <tr>
+          <th style="border:1.5px solid #1c1815;background:#d8d2c6;font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:#8a8178;font-weight:700;padding:12px 20px;text-align:center;">#</th>
+          <th style="border:1.5px solid #1c1815;background:#d8d2c6;text-align:left;font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:#8a8178;font-weight:700;padding:12px 20px;">Task</th>
+          <th style="border:1.5px solid #1c1815;background:#d8d2c6;text-align:left;font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:#8a8178;font-weight:700;padding:12px 20px;">Description</th>
+          <th style="border:1.5px solid #1c1815;background:#d8d2c6;text-align:center;font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:#8a8178;font-weight:700;padding:12px 20px;">Unit / Qty</th>
+          <th style="border:1.5px solid #1c1815;background:#d8d2c6;font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:#8a8178;font-weight:700;padding:12px 20px;text-align:center;">Done</th>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">1</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Product page rewrite</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">new copy, layout and image direction, published on your top-selling pages.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">6 pages</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">2</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Offer built on the store</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">bundle or launch price live, with promo code, homepage banner and free-UAE-shipping message.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">1 setup</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">3</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Drop campaign kit</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">teaser, launch-day and last-call posts plus stories and captions for one drop or restock.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">9 assets</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">4</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">WhatsApp ordering setup</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">catalogue link, saved quick replies and a how-to-order graphic.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">1 setup</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">5</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Signup form &amp; popup installed</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">email and WhatsApp capture live on the store, list connected.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">1 setup</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">6</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Win-back + referral posts</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">one win-back post and three referral posts ready to publish.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">4 posts</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">7</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">On-page SEO pass</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">titles, meta, alt text, URLs and internal links updated page by page.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">10 pages</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">8</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Buying-guide articles</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">around 800 words each, written and published.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">3 posts</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">9</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Technical &amp; local SEO setup</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">sitemap, speed fixes, Google Business Profile and directory listings.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">1 setup</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">10</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Founder story + press kit</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">written bio, story angle, boilerplate and image pack in a shared folder.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">1 kit</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">11</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">Press &amp; podcast pitches</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">target list built, tailored pitches sent and followed up.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">20 pitches</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">12</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">“As seen in” assets</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">each press hit turned into a post, plus a trust strip on the store.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">3 posts</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+        <tr>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:600;color:#8a8178;">13</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;font-weight:600;color:#1c1815;white-space:nowrap;">End-of-plan results report</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;font-size:21px;line-height:1.2;color:#5f574e;">written review of what converted and where to double down next.</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 20px;vertical-align:middle;text-align:center;font-size:21px;font-weight:400;color:#1c1815;">1 report</td>
+          <td style="border:1.5px solid #1c1815;padding:11px 12px;vertical-align:middle;text-align:center;"><div style="width:22px;height:22px;border:1.5px solid #1c1815;margin:0 auto;"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Product page rewrite section removed. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Product page rewrite</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      
+      <div style="flex:1.15;background:#141210;color:#faf7f2;padding:34px 38px;box-sizing:border-box;display:flex;flex-direction:column;">
+        <image-slot id="img-hoodie" style="display:block;width:100%;height:180px;margin-bottom:18px;" placeholder="Heavyweight Training Hoodie — product photo"></image-slot>
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a67f10;margin-bottom:10px;">Worked example</div>
+        <div style="font-family:'Antonio',sans-serif;font-weight:500;font-size:34px;line-height:1.05;margin-bottom:16px;">Heavyweight Training Hoodie</div>
+        <p style="font-size:20px;line-height:1.4;margin:0 0 18px;color:#c9c0b5;">A 400gsm cotton hoodie built for the walk to the gym and the hours after. Close through the shoulders without pulling; holds its shape through repeat washes.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+          <span style="border:1px solid rgba(250,247,242,.22);padding:7px 14px;font-size:16px;color:#faf7f2;">400gsm brushed cotton</span>
+          <span style="border:1px solid rgba(250,247,242,.22);padding:7px 14px;font-size:16px;color:#faf7f2;">Regular cut, mid-hip</span>
+          <span style="border:1px solid rgba(250,247,242,.22);padding:7px 14px;font-size:16px;color:#faf7f2;">Flatlock seams</span>
+        </div>
+        <p style="font-size:19px;line-height:1.4;margin:0;color:#c9c0b5;"><strong style="color:#faf7f2;">Fit:</strong> runs true to size, Ali is 178cm, wears a medium. <strong style="color:#faf7f2;">Ships</strong> from Dubai in 1–2 days, UAE delivery 2–4 days, 14-day returns.</p>
+      </div>
+      <div style="flex:1.15;background:#141210;color:#faf7f2;padding:34px 38px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a67f10;margin-bottom:10px;">Deliverable 02 · The offer</div>
+        <div style="font-family:'Antonio',sans-serif;font-weight:500;font-size:34px;line-height:1.05;margin-bottom:18px;">Offer built on the store</div>
+        <p style="font-size:22px;line-height:1.4;margin:0 0 26px;color:#c9c0b5;">Buy any two pieces, get the third at <strong style="color:#faf7f2;">30% off</strong>, or free UAE shipping over AED 250. Runs to the end of the launch month.</p>
+        <div style="font-family:'Antonio',sans-serif;font-size:40px;letter-spacing:.14em;color:#a67f10;border:1.5px dashed rgba(166,127,16,.6);padding:16px 24px;text-align:center;">KOSTYLE30</div>
+      </div>
+    </div>
+</section>
+  -->
+
+    <section data-label="03 Drop kit" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="25b44611">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Drop campaign kit</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;flex:1;">
+      <div style="background:#e0dacd;padding:28px 30px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+        <image-slot id="img-drop-teaser" style="display:block;width:100%;height:150px;" placeholder="Clip / photo of the piece"></image-slot>
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;">TEASER · 3–5 DAYS OUT</div>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">The Heavyweight Hoodie drops Friday. 80 made. Set a reminder.</p>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">A first look at what lands Friday. Tap the story to see it move.</p>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Friday, 8pm. Turn on notifications so you do not miss it.</p>
+      </div>
+      <div style="background:#e0dacd;padding:28px 30px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+        <image-slot id="img-drop-launch" style="display:block;width:100%;height:150px;" placeholder="Clip / photo of the piece"></image-slot>
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;">LAUNCH DAY · AT DROP TIME</div>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Live now. The Heavyweight Hoodie is on the site. Link in bio.</p>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Here is how it wears. 400gsm cotton, cut for training. Shop it at kostyle.ae.</p>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Free UAE shipping over AED 250 on the drop. Sizes are going in order.</p>
+      </div>
+      <div style="background:#e0dacd;padding:28px 30px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+        <image-slot id="img-drop-lastcall" style="display:block;width:100%;height:150px;" placeholder="Clip / photo of the piece"></image-slot>
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;">LAST CALL · STOCK LOW</div>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Low stock on medium and large. If it is in your cart, check out before it goes.</p>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Almost gone. This run will not restock.</p>
+        <p style="margin:0;font-size:19px;line-height:1.4;color:#3a352f;">Final pieces on the site now. Last chance at this price.</p>
+      </div>
+    </div>
+</section>
+
+  <section data-label="04 WhatsApp" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="3d20f8ec">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">WhatsApp ordering</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      <div style="flex:.8;">
+        <div style="font-size:16px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:20px;">How to order</div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;gap:16px;align-items:baseline;"><span style="font-family:'Antonio',sans-serif;font-weight:600;font-size:26px;color:#a67f10;">1</span><span style="font-size:22px;line-height:1.3;">Message us the item and your size.</span></div>
+          <div style="display:flex;gap:16px;align-items:baseline;"><span style="font-family:'Antonio',sans-serif;font-weight:600;font-size:26px;color:#a67f10;">2</span><span style="font-size:22px;line-height:1.3;">We confirm the price and stock.</span></div>
+          <div style="display:flex;gap:16px;align-items:baseline;"><span style="font-family:'Antonio',sans-serif;font-weight:600;font-size:26px;color:#a67f10;">3</span><span style="font-size:22px;line-height:1.3;">Pay by card, bank transfer, or cash on delivery.</span></div>
+          <div style="display:flex;gap:16px;align-items:baseline;"><span style="font-family:'Antonio',sans-serif;font-weight:600;font-size:26px;color:#a67f10;">4</span><span style="font-size:22px;line-height:1.3;">We ship and send you the tracking.</span></div>
+        </div>
+      </div>
+      <div style="flex:1.2;">
+        <div style="font-size:16px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:12px;">Saved quick replies</div>
+        <div style="display:flex;flex-direction:column;font-size:18px;">
+          <div style="display:flex;gap:20px;padding:12px 0;border-bottom:1px solid #cfc8ba;"><div style="font-family:'Antonio',sans-serif;font-weight:600;color:#a67f10;min-width:86px;">/hi</div><div style="line-height:1.3;color:#3a352f;">Thanks for messaging Kostyle. Tell us the item and size and we will check stock.</div></div>
+          <div style="display:flex;gap:20px;padding:12px 0;border-bottom:1px solid #cfc8ba;"><div style="font-family:'Antonio',sans-serif;font-weight:600;color:#a67f10;min-width:86px;">/price</div><div style="line-height:1.3;color:#3a352f;">That piece is [AED price]. Free UAE shipping over AED 250.</div></div>
+          <div style="display:flex;gap:20px;padding:12px 0;border-bottom:1px solid #cfc8ba;"><div style="font-family:'Antonio',sans-serif;font-weight:600;color:#a67f10;min-width:86px;">/sizes</div><div style="line-height:1.3;color:#3a352f;">It comes in S to XL. Send your usual size and we will tell you how it runs.</div></div>
+          <div style="display:flex;gap:20px;padding:12px 0;border-bottom:1px solid #cfc8ba;"><div style="font-family:'Antonio',sans-serif;font-weight:600;color:#a67f10;min-width:86px;">/pay</div><div style="line-height:1.3;color:#3a352f;">Card, bank transfer, or cash on delivery. We ship once payment is confirmed.</div></div>
+          <div style="display:flex;gap:20px;padding:12px 0;border-bottom:1px solid #cfc8ba;"><div style="font-family:'Antonio',sans-serif;font-weight:600;color:#a67f10;min-width:86px;">/ship</div><div style="line-height:1.3;color:#3a352f;">We ship from Dubai in 1–2 days. UAE delivery takes 2–4 days.</div></div>
+          <div style="display:flex;gap:20px;padding:12px 0;border-bottom:1px solid #cfc8ba;"><div style="font-family:'Antonio',sans-serif;font-weight:600;color:#a67f10;min-width:86px;">/done</div><div style="line-height:1.3;color:#3a352f;">Order confirmed. We will send tracking once it ships. Thanks for supporting Kostyle.</div></div>
+        </div>
+      </div>
+    </div>
+</section>
+
+  <!-- Welcome sequence section removed. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Welcome sequence</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;flex:1;">
+      <div style="border-top:3px solid #1c1815;padding-top:24px;display:flex;flex-direction:column;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.05em;color:#a67f10;margin-bottom:16px;">EMAIL 1 · IMMEDIATELY</div>
+        <div style="font-family:'Antonio',sans-serif;font-weight:500;font-size:32px;line-height:1.1;margin-bottom:16px;">Here is your code</div>
+        <p style="font-size:20px;line-height:1.4;margin:0;color:#5f574e;">Delivers the free shipping code, WELCOME10, and sets the tone: you hear from us on drops and restocks, not much in between.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:24px;display:flex;flex-direction:column;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.05em;color:#a67f10;margin-bottom:16px;">EMAIL 2 · DAY 3</div>
+        <div style="font-family:'Antonio',sans-serif;font-weight:500;font-size:32px;line-height:1.1;margin-bottom:16px;">Why we make it this way</div>
+        <p style="font-size:20px;line-height:1.4;margin:0;color:#5f574e;">Builds trust with the story and the make, Dubai-finished, heavyweight cotton built to take real use. Reminds them the code is still good.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:24px;display:flex;flex-direction:column;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.05em;color:#a67f10;margin-bottom:16px;">EMAIL 3 · DAY 6</div>
+        <div style="font-family:'Antonio',sans-serif;font-weight:500;font-size:32px;line-height:1.1;margin-bottom:16px;">Your code runs out soon</div>
+        <p style="font-size:20px;line-height:1.4;margin:0;color:#5f574e;">Nudges the first order before the code expires. Points to the Heavyweight Training Hoodie as where most people start.</p>
+      </div>
+    </div>
+</section>
+  -->
+
+  <!-- Win-back campaign slide merged into Referral posts. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Win-back campaign</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      <div style="flex:1;border:1.5px solid rgba(28,24,21,.18);padding:36px 40px;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:18px;">Email</div>
+        <p style="font-size:21px;line-height:1.4;margin:0 0 14px;"><strong>Subject:</strong> It has been a while</p>
+        <p style="font-size:21px;line-height:1.45;margin:0;color:#5f574e;">Thanks for buying earlier this year. Since then we added new training shorts and restocked the Heavyweight Hoodie. As a past buyer, here is 15% off your next order with BACK15.</p>
+      </div>
+      <div style="flex:1;background:#141210;color:#faf7f2;padding:36px 40px;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a67f10;margin-bottom:18px;">WhatsApp version</div>
+        <p style="font-size:22px;line-height:1.5;margin:0;color:#faf7f2;">Hey [name], it is Kostyle. We have new training shorts in and wanted to give past buyers first look. Here is 15% off with code BACK15 until the end of the month. Want me to send you the link?</p>
+      </div>
+    </div>
+</section>
+  -->
+
+  <section data-label="07 Win-back + referral posts" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="30002de9">
+     <div style="display:grid;grid-template-columns:1fr 2fr;gap:44px;flex:1;align-items:start;">
+       <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0;">Win-back + referral posts</h2>
+       <div style="display:flex;flex-direction:column;gap:18px;">
+         <div style="border-top:3px solid #1c1815;padding-top:16px;">
+           <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;margin-bottom:8px;">WIN-BACK POST</div>
+           <p style="font-size:21px;line-height:1.4;margin:0;color:#3a352f;">It has been a while. Take 15% off your next order with BACK15 before the end of the month.</p>
+         </div>
+         <div style="border-top:1px solid #cfc8ba;padding-top:16px;">
+           <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;margin-bottom:8px;">FEED POST</div>
+           <p style="font-size:21px;line-height:1.4;margin:0;color:#3a352f;">Bring a training partner. Share your code and you both get AED 30 off. Your code is in your account. Tag someone who needs the kit.</p>
+         </div>
+         <div style="border-top:1px solid #cfc8ba;padding-top:16px;">
+           <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;margin-bottom:8px;">STORY</div>
+           <p style="font-size:21px;line-height:1.4;margin:0;color:#3a352f;">Refer a friend, you both save AED 30. Swipe up for your code.</p>
+         </div>
+         <div style="border-top:1px solid #cfc8ba;padding-top:16px;">
+           <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:18px;letter-spacing:.06em;color:#a67f10;margin-bottom:8px;">REPLY TO A TAG</div>
+           <p style="font-size:21px;line-height:1.4;margin:0;color:#3a352f;">Appreciate the tag. Send your friends your referral code and you both get AED 30 off the next order.</p>
+         </div>
+       </div>
+     </div>
+</section>
+
+  <!-- Keyword map & tracking section removed. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Keyword map &amp; tracking</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      <div style="flex:1.4;">
+        <div style="display:flex;gap:20px;padding:12px 0;border-bottom:2px solid #1c1815;font-family:'Antonio',sans-serif;font-weight:600;font-size:16px;letter-spacing:.08em;color:#8a8178;text-transform:uppercase;"><div style="min-width:230px;">Page</div><div>Primary keyword</div></div>
+        <div style="display:flex;gap:20px;padding:14px 0;border-bottom:1px solid #cfc8ba;font-size:20px;"><div style="min-width:230px;font-weight:600;">Homepage</div><div style="color:#a67f10;">boxing wear Dubai</div></div>
+        <div style="display:flex;gap:20px;padding:14px 0;border-bottom:1px solid #cfc8ba;font-size:20px;"><div style="min-width:230px;font-weight:600;">Collection</div><div style="color:#a67f10;">training hoodies UAE</div></div>
+        <div style="display:flex;gap:20px;padding:14px 0;border-bottom:1px solid #cfc8ba;font-size:20px;"><div style="min-width:230px;font-weight:600;">Product: hoodie</div><div style="color:#a67f10;">boxing hoodie Dubai</div></div>
+        <div style="display:flex;gap:20px;padding:14px 0;border-bottom:1px solid #cfc8ba;font-size:20px;"><div style="min-width:230px;font-weight:600;">Product: shorts</div><div style="color:#a67f10;">boxing shorts UAE</div></div>
+        <div style="display:flex;gap:20px;padding:14px 0;border-bottom:1px solid #cfc8ba;font-size:20px;"><div style="min-width:230px;font-weight:600;">About</div><div style="color:#a67f10;">Dubai boxing brand</div></div>
+        <div style="display:flex;gap:20px;padding:14px 0;border-bottom:1px solid #cfc8ba;font-size:20px;"><div style="min-width:230px;font-weight:600;">Blog index</div><div style="color:#a67f10;">how to choose training gear</div></div>
+      </div>
+      <div style="flex:1;background:#141210;color:#faf7f2;padding:34px 36px;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a67f10;margin-bottom:20px;">Tracking installed</div>
+        <p style="font-size:21px;line-height:1.4;margin:0 0 20px;color:#c9c0b5;"><strong style="color:#faf7f2;">Google Search Console</strong>, verified on kostyle.ae, sitemap submitted.</p>
+        <p style="font-size:21px;line-height:1.4;margin:0;color:#c9c0b5;"><strong style="color:#faf7f2;">Google Analytics</strong>, tracking checkout and signup as events.</p>
+      </div>
+    </div>
+</section>
+  -->
+
+  <section data-label="10 On-page SEO" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="81eb2ed7">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">On-page SEO pass</h2>
+    <div style="display:flex;flex-direction:column;flex:1;">
+      <div style="display:flex;gap:28px;padding:18px 0;border-bottom:1px solid #cfc8ba;"><div style="min-width:180px;font-family:'Antonio',sans-serif;font-weight:600;font-size:19px;color:#a67f10;padding-top:4px;">Homepage</div><div><div style="font-size:23px;font-weight:600;margin-bottom:4px;">Kostyle · Boxing Wear Made in Dubai</div><div style="font-size:20px;color:#5f574e;">Boxing and training wear made in Dubai. Free UAE shipping over AED 250.</div></div></div>
+      <div style="display:flex;gap:28px;padding:18px 0;border-bottom:1px solid #cfc8ba;"><div style="min-width:180px;font-family:'Antonio',sans-serif;font-weight:600;font-size:19px;color:#a67f10;padding-top:4px;">Collection</div><div><div style="font-size:23px;font-weight:600;margin-bottom:4px;">Training Hoodies · Kostyle</div><div style="font-size:20px;color:#5f574e;">Heavyweight hoodies built for training and daily wear. Shop the collection at kostyle.ae.</div></div></div>
+      <div style="display:flex;gap:28px;padding:18px 0;border-bottom:1px solid #cfc8ba;"><div style="min-width:180px;font-family:'Antonio',sans-serif;font-weight:600;font-size:19px;color:#a67f10;padding-top:4px;">Hoodie</div><div><div style="font-size:23px;font-weight:600;margin-bottom:4px;">Heavyweight Boxing Hoodie · Kostyle</div><div style="font-size:20px;color:#5f574e;">400gsm cotton, cut for training. Free UAE shipping over AED 250.</div></div></div>
+      <div style="display:flex;gap:28px;padding:18px 0;border-bottom:1px solid #cfc8ba;"><div style="min-width:180px;font-family:'Antonio',sans-serif;font-weight:600;font-size:19px;color:#a67f10;padding-top:4px;">About</div><div><div style="font-size:23px;font-weight:600;margin-bottom:4px;">About Kostyle · Made in Dubai</div><div style="font-size:20px;color:#5f574e;">Why Ali Hamze makes boxing wear the way he does, and where it is made.</div></div></div>
+       <p style="font-size:19px;line-height:1.4;color:#5f574e;margin:24px 0 0;">Remaining product pages follow the same pattern. Alt text was added to every product image describing the item and colour.</p>
+       <p style="font-size:19px;line-height:1.4;color:#5f574e;margin:14px 0 0;">Sitemap generated and submitted to Search Console. Page speed checked, images compressed, theme scripts trimmed.</p>
+     </div>
+</section>
+
+  <section data-label="11 Articles" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="0c977c3f">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Buying-guide articles</h2>
+    <div style="display:flex;flex-direction:column;gap:24px;flex:1;max-width:1100px;">
+      <div style="border-top:3px solid #1c1815;padding-top:20px;font-family:'Antonio',sans-serif;font-weight:500;font-size:34px;line-height:1.15;">1. How to choose a training hoodie that lasts</div>
+      <div style="border-top:3px solid #1c1815;padding-top:20px;font-family:'Antonio',sans-serif;font-weight:500;font-size:34px;line-height:1.15;">2. What to look for in boxing shorts</div>
+      <div style="border-top:3px solid #1c1815;padding-top:20px;font-family:'Antonio',sans-serif;font-weight:500;font-size:34px;line-height:1.15;">3. Training wear that works in Dubai heat</div>
+    </div>
+</section>
+
+  <!-- Technical & local SEO section removed. -->
+  <!--
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Technical &amp; local SEO</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:20px;">Technical checklist</div>
+        <div style="display:flex;flex-direction:column;gap:18px;font-size:21px;line-height:1.35;">
+          <div style="display:flex;gap:14px;"><span style="color:#a67f10;font-weight:700;">→</span>Sitemap generated and submitted to Search Console.</div>
+          <div style="display:flex;gap:14px;"><span style="color:#a67f10;font-weight:700;">→</span>Page speed checked, images compressed, theme scripts trimmed.</div>
+          <div style="display:flex;gap:14px;"><span style="color:#a67f10;font-weight:700;">→</span>Mobile layout checked on common phone sizes.</div>
+          <div style="display:flex;gap:14px;"><span style="color:#a67f10;font-weight:700;">→</span>Broken links and redirects cleared.</div>
+        </div>
+      </div>
+      <div style="flex:1;background:#141210;color:#faf7f2;padding:34px 36px;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a67f10;margin-bottom:18px;">Google Business Profile</div>
+        <div style="display:flex;flex-direction:column;font-size:20px;">
+          <div style="display:flex;gap:18px;padding:10px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:140px;font-family:'Antonio',sans-serif;font-weight:600;font-size:16px;color:#a67f10;">NAME</div><div>Kostyle</div></div>
+          <div style="display:flex;gap:18px;padding:10px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:140px;font-family:'Antonio',sans-serif;font-weight:600;font-size:16px;color:#a67f10;">CATEGORY</div><div>Sportswear store</div></div>
+          <div style="display:flex;gap:18px;padding:10px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:140px;font-family:'Antonio',sans-serif;font-weight:600;font-size:16px;color:#a67f10;">AREA</div><div>Dubai and UAE</div></div>
+          <div style="display:flex;gap:18px;padding:10px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:140px;font-family:'Antonio',sans-serif;font-weight:600;font-size:16px;color:#a67f10;">WEBSITE</div><div>kostyle.ae</div></div>
+        </div>
+        <p style="font-size:18px;line-height:1.4;color:#c9c0b5;margin:18px 0 0;">Also submitted to local Dubai retail directories and partner gym pages with consistent name, website, and contact.</p>
+      </div>
+    </div>
+ </section>
+  -->
+
+  <section data-label="13 Press kit" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="9d009da7">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Founder story &amp; press kit</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      <div style="flex:1.3;">
+        <image-slot id="img-founder" shape="rounded" radius="14" style="display:block;width:100%;height:190px;margin-bottom:20px;" placeholder="Founder portrait — Ali Hamze"></image-slot>
+        <div style="font-size:16px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:14px;">Story angle</div>
+        <p style="font-size:22px;line-height:1.5;margin:0 0 24px;">A Dubai-made boxing and training brand, built by Ali Hamze because the kit he trained in either fell apart or was never made for the ring. The local-press hook: a homegrown brand competing with imported labels on quality and fit.</p>
+        <div style="font-size:16px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:12px;">In the kit</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <span style="background:#e0dacd;padding:9px 16px;font-size:18px;">Short &amp; long founder bio</span>
+          <span style="background:#e0dacd;padding:9px 16px;font-size:18px;">Boilerplate</span>
+          <span style="background:#e0dacd;padding:9px 16px;font-size:18px;">Fact sheet</span>
+          <span style="background:#e0dacd;padding:9px 16px;font-size:18px;">Image pack</span>
+        </div>
+      </div>
+      <div style="flex:1;background:#141210;color:#faf7f2;padding:32px 36px;box-sizing:border-box;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.06em;color:#a67f10;margin-bottom:18px;">FACT SHEET</div>
+        <div style="display:flex;flex-direction:column;font-size:20px;">
+          <div style="display:flex;gap:18px;padding:11px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:130px;color:#8a8178;">Founded</div><div>2024</div></div>
+          <div style="display:flex;gap:18px;padding:11px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:130px;color:#8a8178;">Based</div><div>Dubai, UAE</div></div>
+          <div style="display:flex;gap:18px;padding:11px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:130px;color:#8a8178;">Made in</div><div>Dubai</div></div>
+          <div style="display:flex;gap:18px;padding:11px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:130px;color:#8a8178;">Products</div><div>Hoodies, shorts, tees</div></div>
+          <div style="display:flex;gap:18px;padding:11px 0;border-bottom:1px solid rgba(250,247,242,.14);"><div style="min-width:130px;color:#8a8178;">Founder</div><div>Ali Hamze</div></div>
+        </div>
+      </div>
+    </div>
+</section>
+
+  <section data-label="14 Pitches" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="607767f3">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Press &amp; podcast pitches</h2>
+    <div style="display:flex;gap:44px;flex:1;">
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8a8178;margin-bottom:18px;">Target list</div>
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <div style="border-left:3px solid #a67f10;padding-left:20px;"><div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.05em;color:#a67f10;margin-bottom:4px;">LOCAL PRESS</div><div style="font-size:22px;">Dubai lifestyle, retail, and sport outlets</div></div>
+          <div style="border-left:3px solid #a67f10;padding-left:20px;"><div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.05em;color:#a67f10;margin-bottom:4px;">PODCASTS</div><div style="font-size:22px;">UAE combat sports and small-business shows</div></div>
+          <div style="border-left:3px solid #a67f10;padding-left:20px;"><div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.05em;color:#a67f10;margin-bottom:4px;">COMMUNITY</div><div style="font-size:22px;">Boxing gyms, coaches, and local sport groups</div></div>
+        </div>
+      </div>
+      <div style="flex:1.15;background:#e0dacd;padding:32px 36px;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a67f10;margin-bottom:16px;">Pitch email</div>
+        <p style="font-size:20px;line-height:1.5;margin:0 0 12px;color:#1c1815;"><strong>Subject:</strong> Dubai boxing brand, story for [outlet]</p>
+        <p style="font-size:20px;line-height:1.5;margin:0;color:#3a352f;">Hi [name], [one line showing you know their outlet]. I run Kostyle, a boxing and training wear brand made in Dubai, started after years training in kit that did not hold up, now worn in gyms across the city. Happy to send more or come on to talk about building a homegrown brand in a market full of imports. Press kit and images: [link].</p>
+      </div>
+    </div>
+</section>
+
+  <section data-label="15 As seen in" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="cd486016">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">“As seen in” assets</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;flex:1;">
+      <div style="border-top:3px solid #1c1815;padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.05em;color:#a67f10;margin-bottom:16px;">POST CAPTION</div>
+        <p style="font-size:22px;line-height:1.45;margin:0;">Kostyle in [outlet]. Thanks to [name or handle] for the feature. Link in our story.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.05em;color:#a67f10;margin-bottom:16px;">STORY LINE</div>
+        <p style="font-size:22px;line-height:1.45;margin:0;">We are in [outlet]. Tap to read.</p>
+      </div>
+      <div style="border-top:3px solid #1c1815;padding-top:24px;">
+        <div style="font-family:'Antonio',sans-serif;font-weight:600;font-size:17px;letter-spacing:.05em;color:#a67f10;margin-bottom:16px;">STORE TRUST STRIP</div>
+        <p style="font-size:22px;line-height:1.45;margin:0 0 18px;">A homepage row reading “As seen in” with each outlet’s logo, added as coverage lands.</p>
+        <div style="display:flex;gap:12px;">
+          <image-slot id="img-logo1" shape="rounded" style="display:block;flex:1;height:64px;" placeholder="Outlet logo"></image-slot>
+          <image-slot id="img-logo2" shape="rounded" style="display:block;flex:1;height:64px;" placeholder="Outlet logo"></image-slot>
+          <image-slot id="img-logo3" shape="rounded" style="display:block;flex:1;height:64px;" placeholder="Outlet logo"></image-slot>
+        </div>
+      </div>
+    </div>
+</section>
+
+  <section data-label="16 Results" style="position:relative;width:100%;height:100%;background:#e8e4dc;color:#1c1815;font-family:'Inter',sans-serif;padding:78px 120px 132px;box-sizing:border-box;display:flex;flex-direction:column;" data-om-slide-id="baf153ea">
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:54px;line-height:1.02;letter-spacing:-.01em;margin:0 0 12px;">Results report</h2>
+    <div style="display:flex;gap:40px;flex:1;">
+      <div style="flex:1.25;">
+        <div style="font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#a67f10;margin-bottom:10px;">Marketing outputs, under our control</div>
+        <div style="display:flex;flex-direction:column;font-size:18px;">
+          <div style="display:flex;padding:10px 0;border-bottom:2px solid #1c1815;font-family:'Antonio',sans-serif;font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#8a8178;"><div style="flex:2;">Measure</div><div style="flex:1;text-align:right;">Start</div><div style="flex:1;text-align:right;">End</div></div>
+          <div style="display:flex;padding:10px 0;border-bottom:1px solid #cfc8ba;"><div style="flex:2;">Email &amp; WhatsApp list</div><div style="flex:1;text-align:right;color:#5f574e;">140</div><div style="flex:1;text-align:right;font-weight:600;color:#a67f10;">620</div></div>
+          <div style="display:flex;padding:10px 0;border-bottom:1px solid #cfc8ba;"><div style="flex:2;">Store visits / month</div><div style="flex:1;text-align:right;color:#5f574e;">1,900</div><div style="flex:1;text-align:right;font-weight:600;color:#a67f10;">5,400</div></div>
+          <div style="display:flex;padding:10px 0;border-bottom:1px solid #cfc8ba;"><div style="flex:2;">Email open rate</div><div style="flex:1;text-align:right;color:#5f574e;">—</div><div style="flex:1;text-align:right;font-weight:600;color:#a67f10;">41%</div></div>
+          <div style="display:flex;padding:10px 0;border-bottom:1px solid #cfc8ba;"><div style="flex:2;">Content published</div><div style="flex:1;text-align:right;color:#5f574e;">0</div><div style="flex:1;text-align:right;font-weight:600;color:#a67f10;">3 + 12</div></div>
+          <div style="display:flex;padding:10px 0;border-bottom:1px solid #cfc8ba;"><div style="flex:2;">Pages showing in Google</div><div style="flex:1;text-align:right;color:#5f574e;">2</div><div style="flex:1;text-align:right;font-weight:600;color:#a67f10;">14</div></div>
+          <div style="display:flex;padding:10px 0;border-bottom:1px solid #cfc8ba;"><div style="flex:2;">Press placements</div><div style="flex:1;text-align:right;color:#5f574e;">0</div><div style="flex:1;text-align:right;font-weight:600;color:#a67f10;">4</div></div>
+        </div>
+      </div>
+    </div>
+</section>
+
+  <!-- What Success Looks Like section removed. -->
+  <!--
+    <div style="font-size:21px;letter-spacing:.24em;text-transform:uppercase;color:#a67f10;font-weight:700;margin-bottom:18px;">What Success Looks Like</div>
+    <h2 style="font-family:'Antonio',sans-serif;font-weight:500;font-size:64px;line-height:1.04;margin:0 0 14px;letter-spacing:-.01em;max-width:22ch;">How we'll know it's working.</h2>
+    <p style="font-size:28px;color:#8a8178;margin:0 0 46px;">Buyers from the audience you already have — on zero ad spend.</p>
+    <image-slot id="scoreboard-image" shape="rounded" radius="14" placeholder="Drop image here" style="position:absolute;right:120px;top:110px;width:440px;height:380px;z-index:1;"></image-slot>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:44px;">
+      <div style="border-top:2px solid rgba(250,247,242,.25);padding-top:24px;"><div style="font-family:'Antonio',sans-serif;font-size:54px;font-weight:600;color:#a67f10;line-height:1;">≥2%</div><div style="font-size:32px;color:#c9c0b5;margin-top:12px;line-height:1.4;">Store conversion rate</div></div>
+      <div style="border-top:2px solid rgba(250,247,242,.25);padding-top:24px;"><div style="font-family:'Antonio',sans-serif;font-size:54px;font-weight:600;color:#a67f10;line-height:1;">500+</div><div style="font-size:32px;color:#c9c0b5;margin-top:12px;line-height:1.4;">Email &amp; WhatsApp contacts captured</div></div>
+      <div style="border-top:2px solid rgba(250,247,242,.25);padding-top:24px;"><div style="font-family:'Antonio',sans-serif;font-size:54px;font-weight:600;color:#a67f10;line-height:1;">25%</div><div style="font-size:32px;color:#c9c0b5;margin-top:12px;line-height:1.4;">Repeat-buyer rate</div></div>
+      
+    </div>
+  </section>
+  -->
+
+</x-import>
+</x-dc>
+</body>
+</html>

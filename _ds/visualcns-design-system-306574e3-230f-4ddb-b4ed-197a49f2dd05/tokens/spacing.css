@@ -1,0 +1,24 @@
+/* ============================================================
+   VisualCNS — Spacing tokens (4px base grid)
+   ============================================================ */
+:root {
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Layout */
+  --container-max: 80rem;      /* max-w-7xl — the marketing + dashboard shell width */
+  --gutter: 24px;              /* mobile page gutter (px-6) */
+  --gutter-lg: 80px;           /* desktop page gutter (md:px-20) */
+  --section-y: 80px;           /* vertical rhythm between marketing sections */
+}

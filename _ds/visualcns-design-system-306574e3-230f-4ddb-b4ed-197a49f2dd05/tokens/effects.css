@@ -1,0 +1,46 @@
+/* ============================================================
+   VisualCNS — Radius, borders, shadows, motion
+   Signature: sharp-cornered base UI (radius 0) + fully-round pills
+   for CTAs/nav + softly-rounded marketing cards.
+   ============================================================ */
+:root {
+  /* Radius — base is deliberately SQUARE (--radius: 0) */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;      /* shadcn "card" corner in this system */
+  --radius-md: 6px;      /* inputs, selects, badges, menus */
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;    /* marketing offer cards, mega-menus */
+  --radius-pill: 9999px; /* nav links, CTAs, currency toggles, tool chips */
+
+  /* Semantic radii */
+  --radius-button: var(--radius-sm);
+  --radius-input: var(--radius-md);
+  --radius-card: var(--radius-sm);
+  --radius-card-marketing: var(--radius-2xl);
+  --radius-cta: var(--radius-pill);
+
+  /* Borders — everything hangs off a single hairline */
+  --border-hairline: 1px solid var(--border);
+  --border-strong: 1px solid var(--foreground);
+
+  /* Shadows — restrained; UI leans on borders, not elevation */
+  --shadow-xs: 0 1px 2px rgba(10, 15, 26, 0.05);
+  --shadow-sm: 0 1px 3px rgba(10, 15, 26, 0.08), 0 1px 2px rgba(10, 15, 26, 0.04);
+  --shadow-md: 0 4px 12px rgba(10, 15, 26, 0.08);
+  --shadow-lg: 0 12px 32px rgba(10, 15, 26, 0.12);
+  --shadow-tab: 0 1px 5px rgba(0, 0, 0, 0.08);   /* active pricing tab */
+  --shadow-ring: 0 0 0 3px hsl(221.2 83.2% 53.3% / 0.5);  /* focus ring */
+
+  /* Motion — quiet, functional; color/opacity fades, no bounce */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1); /* @kind other */
+  --duration-fast: 150ms; /* @kind other */
+  --duration-normal: 200ms; /* @kind other */
+  --duration-slow: 500ms; /* @kind other */  /* portfolio image scale on hover */
+  --transition-colors: color var(--duration-normal) var(--ease-standard), background-color var(--duration-normal) var(--ease-standard), border-color var(--duration-normal) var(--ease-standard);
+
+  /* Backdrop — sticky header/glass */
+  --blur-header: 12px;
+}

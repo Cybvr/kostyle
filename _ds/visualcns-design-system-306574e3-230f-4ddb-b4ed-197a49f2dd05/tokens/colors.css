@@ -1,0 +1,70 @@
+/* ============================================================
+   VisualCNS — Color tokens
+   Base palette + semantic aliases (mirrors the app's shadcn names)
+   ============================================================ */
+:root {
+  /* --- Base palette --- */
+  --vcns-white: #ffffff;
+  --vcns-ink: hsl(222.2 84% 4.9%);        /* near-black navy — primary text/surfaces */
+  --vcns-ink-90: hsl(222.2 47% 11%);
+  --vcns-cream: #f3f2f0;                   /* warm off-white — cards, tab tracks */
+  --vcns-cream-deep: #e9eef6;              /* cool tinted surface — search fields */
+  --vcns-panel: #f8fafd;                   /* app header / panel wash */
+
+  /* Brand blue */
+  --vcns-blue: hsl(221.2 83.2% 53.3%);     /* accent + primary action ~ #3b82f6 */
+  --vcns-blue-strong: hsl(221.2 83.2% 46%);
+  --vcns-blue-electric: #0E32FC;           /* logo mark — reserved for the brand glyph */
+  --vcns-blue-100: hsl(214 95% 93%);
+  --vcns-blue-200: hsl(213 97% 87%);
+
+  /* Neutrals */
+  --vcns-black: #0a0a0a;
+  --vcns-gray-900: #171717;
+  --vcns-gray-700: #404040;
+  --vcns-gray-600: #525252;                /* muted foreground */
+  --vcns-gray-400: #a3a3a3;
+  --vcns-gray-200: hsl(210 40% 96%);       /* secondary / muted surface */
+  --vcns-border: hsl(214.3 31.8% 91.4%);   /* hairline borders + inputs */
+
+  /* Semantic status */
+  --vcns-destructive: hsl(0 84.2% 60.2%);
+  --vcns-success: #10b981;                 /* Pasive / Waddi accent */
+  --vcns-warning: #f97316;                 /* Juju accent */
+  --vcns-info: var(--vcns-blue);
+
+  /* Product accents (per-brand) */
+  --vcns-pasive: #10b981;
+  --vcns-juju: #f97316;
+  --vcns-waddi: #10b981;
+  --vcns-colussus: #8b5cf6;
+
+  /* Data-viz ramp (all-blue, matches the app charts) */
+  --vcns-chart-1: hsl(221.2 83.2% 53.3%);
+  --vcns-chart-2: hsl(212 95% 68%);
+  --vcns-chart-3: hsl(216 92% 60%);
+  --vcns-chart-4: hsl(210 98% 78%);
+  --vcns-chart-5: hsl(212 97% 87%);
+
+  /* --- Semantic aliases (shadcn-compatible names the components read) --- */
+  --background: var(--vcns-white);
+  --foreground: var(--vcns-ink);
+  --card: var(--vcns-cream);
+  --card-foreground: var(--vcns-black);
+  --popover: var(--vcns-white);
+  --popover-foreground: var(--vcns-black);
+  --primary: var(--vcns-ink);              /* NB: default Button = ink, not blue */
+  --primary-foreground: #fafafa;
+  --secondary: var(--vcns-gray-200);
+  --secondary-foreground: var(--vcns-black);
+  --muted: var(--vcns-gray-200);
+  --muted-foreground: var(--vcns-gray-600);
+  --accent: var(--vcns-blue);
+  --accent-foreground: #fafafa;
+  --accent-wash: hsl(221.2 83.2% 53.3% / 0.15);
+  --destructive: var(--vcns-destructive);
+  --destructive-foreground: #fafafa;
+  --border: var(--vcns-border);
+  --input: var(--vcns-border);
+  --ring: var(--vcns-blue);
+}
