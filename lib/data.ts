@@ -1,0 +1,139 @@
+import {
+  BarChart3,
+  FileText,
+  Info,
+  LayoutDashboard,
+  ListChecks,
+  Megaphone,
+  Search,
+  Send,
+  type LucideIcon,
+} from "lucide-react";
+
+export type NavItem = { id: string; label: string; icon: LucideIcon };
+
+export const NAV: ReadonlyArray<NavItem> = [
+  { id: "overview", label: "Overview", icon: LayoutDashboard },
+  { id: "roadmap", label: "Roadmap", icon: ListChecks },
+  { id: "campaigns", label: "Campaigns", icon: Megaphone },
+  { id: "articles", label: "Articles", icon: FileText },
+  { id: "seo", label: "SEO", icon: Search },
+  { id: "about", label: "About", icon: Info },
+  { id: "outreach", label: "Outreach", icon: Send },
+  { id: "results", label: "Results", icon: BarChart3 },
+];
+
+export type RoadmapItem = { n: number; task: string; desc: string; unit: string };
+
+export const ROADMAP: ReadonlyArray<RoadmapItem> = [
+  { n: 1, task: "Offer built on the store", desc: "bundle or launch price live, with promo code, homepage banner and free-UAE-shipping message.", unit: "1 setup" },
+  { n: 2, task: "Drop campaign kit", desc: "teaser, launch-day and last-call posts plus stories and captions for one drop or restock.", unit: "9 assets" },
+  { n: 3, task: "WhatsApp ordering setup", desc: "catalogue link, saved quick replies and a how-to-order graphic.", unit: "1 setup" },
+  { n: 4, task: "Win-back + referral posts", desc: "one win-back post and three referral posts ready to publish.", unit: "4 posts" },
+  { n: 5, task: "Buying-guide articles", desc: "around 800 words each, written and published.", unit: "3 posts" },
+  { n: 6, task: "Founder story", desc: "written founder bio and story angle for the brand.", unit: "1 story" },
+  { n: 7, task: "Press kit", desc: "press kit hosted at kostyle.ae/presskit.", unit: "1 link" },
+  { n: 8, task: "Outreach", desc: "press and podcast outreach planned with tailored messages ready to send.", unit: "1 plan" },
+  { n: 9, task: '"As seen in" assets', desc: "each press hit turned into a post, plus a trust strip on the store.", unit: "3 posts" },
+  { n: 10, task: "End-of-plan results report", desc: "written review of what converted and where to double down next.", unit: "1 report" },
+];
+
+export type Stat = { label: string; start: string; end: string };
+
+export const STATS: ReadonlyArray<Stat> = [
+  { label: "Email & WhatsApp list", start: "140", end: "620" },
+  { label: "Store visits / month", start: "1,900", end: "5,400" },
+  { label: "Pages in Google", start: "2", end: "14" },
+  { label: "Press placements", start: "0", end: "4" },
+];
+
+export type DropPost = { label: string; copy: string };
+
+export const DROP_KIT: ReadonlyArray<DropPost> = [
+  {
+    label: "TEASER · 3–5 DAYS OUT",
+    copy: "The Heavyweight Hoodie drops Friday. 80 made. Set a reminder. A first look at what lands Friday. Tap the story to see it move. Friday, 8pm. Turn on notifications so you do not miss it.",
+  },
+  {
+    label: "LAUNCH DAY · AT DROP TIME",
+    copy: "Live now. The Heavyweight Hoodie is on the site. Link in bio. Here is how it wears. 400gsm cotton, cut for training. Shop it at kostyle.ae. Free UAE shipping over AED 250 on the drop. Sizes are going in order.",
+  },
+  {
+    label: "LAST CALL · STOCK LOW",
+    copy: "Low stock on medium and large. If it is in your cart, check out before it goes. Almost gone. This run will not restock. Final pieces on the site now. Last chance at this price.",
+  },
+];
+
+export type QuickReply = { cmd: string; reply: string };
+
+export const QUICK_REPLIES: ReadonlyArray<QuickReply> = [
+  { cmd: "/hi", reply: "Thanks for messaging Kostyle. Tell us the item and size and we will check stock." },
+  { cmd: "/price", reply: "That piece is [AED price]. Free UAE shipping over AED 250." },
+  { cmd: "/sizes", reply: "It comes in S to XL. Send your usual size and we will tell you how it runs." },
+  { cmd: "/pay", reply: "Card, bank transfer, or cash on delivery. We ship once payment is confirmed." },
+  { cmd: "/ship", reply: "We ship from Dubai in 1–2 days. UAE delivery takes 2–4 days." },
+  { cmd: "/done", reply: "Order confirmed. We will send tracking once it ships. Thanks for supporting Kostyle." },
+];
+
+export type NamedCopy = { name: string; copy: string };
+
+export const WIN_BACK: ReadonlyArray<NamedCopy> = [
+  { name: "Win-back post", copy: "It has been a while. Take 15% off your next order with BACK15 before the end of the month." },
+  { name: "Feed post", copy: "Bring a training partner. Share your code and you both get AED 30 off. Your code is in your account. Tag someone who needs the kit." },
+  { name: "Story", copy: "Refer a friend, you both save AED 30. Swipe up for your code." },
+  { name: "Reply to a tag", copy: "Appreciate the tag. Send your friends your referral code and you both get AED 30 off the next order." },
+];
+
+export const ARTICLES: ReadonlyArray<string> = [
+  "How to choose a training hoodie that lasts",
+  "What to look for in boxing shorts",
+  "Training wear that works in Dubai heat",
+];
+
+export type SeoRow = { page: string; title: string; desc: string; copy: boolean };
+
+export const SEO_ROWS: ReadonlyArray<SeoRow> = [
+  { page: "Homepage", title: "Kostyle · Boxing Wear Made in Dubai", desc: "Boxing and training wear made in Dubai. Free UAE shipping over AED 250.", copy: true },
+  { page: "Collection", title: "Training Hoodies · Kostyle", desc: "Heavyweight hoodies built for training and daily wear. Shop the collection at kostyle.ae.", copy: true },
+  { page: "Hoodie", title: "Heavyweight Boxing Hoodie · Kostyle", desc: "400gsm cotton, cut for training. Free UAE shipping over AED 250.", copy: true },
+  { page: "About", title: "About Kostyle · Made in Dubai", desc: "Why Ali Hamze makes boxing wear the way he does, and where it is made.", copy: true },
+  { page: "SEO follow-through", title: "Product pages and images", desc: "Remaining product pages follow the same pattern. Alt text describes every product image and colour.", copy: false },
+  { page: "Technical", title: "Sitemap and performance", desc: "Sitemap submitted to Search Console. Page speed checked, images compressed, and theme scripts trimmed.", copy: false },
+];
+
+export const FOUNDER_STORY =
+  "Kostyle began with a simple frustration: Ali Hamze wanted boxing and training wear that could handle hard sessions, fit properly, and still look right outside the gym. After years of training in pieces that wore out quickly or were not built for the demands of the ring, he started developing a better local alternative in Dubai. The brand is built around durable materials, practical cuts, and a straightforward belief that athletes should not have to choose between performance and style. What started as a response to a gap in his own kit has grown into a homegrown label making hoodies, shorts, and tees for people who train seriously and live actively.";
+
+export const PRESS_KIT_URL = "http://kostyle.ae/presskit";
+
+export type OutreachMessage = { kind: string; subject: string; body: string };
+
+export const OUTREACH: ReadonlyArray<OutreachMessage> = [
+  {
+    kind: "Press",
+    subject: "Dubai-made boxing brand built for real training",
+    body: "Hi [Name], I’m Ali Hamze, founder of Kostyle, a boxing and training wear brand made in Dubai. I started Kostyle after years of training in kit that wore out quickly or was never built for the demands of the ring. We make durable hoodies, shorts, and tees for people who train seriously. I’d love to share the story of building a homegrown alternative to imported labels. Press kit: http://kostyle.ae/presskit",
+  },
+  {
+    kind: "Podcast",
+    subject: "Guest idea — building a boxing-wear brand in Dubai",
+    body: "Hi [Name], I’m Ali Hamze, founder of Kostyle, a Dubai-made boxing and training wear brand. I’d love to join you to talk about building a homegrown label in a market full of imported brands, designing kit for real training, and turning a frustration from the gym into a business. I can share the founder story, lessons from building the product, and what it takes to grow a local sports brand. Press kit: http://kostyle.ae/presskit",
+  },
+];
+
+export const AS_SEEN_IN: ReadonlyArray<NamedCopy> = [
+  { name: "Post caption", copy: "Kostyle in [outlet]. Thanks to [name or handle] for the feature. Link in our story." },
+  { name: "Story line", copy: "We are in [outlet]. Tap to read." },
+  { name: "Store trust strip", copy: "A homepage row reading “As seen in” with each outlet’s logo, added as coverage lands." },
+];
+
+export type ResultRow = { measure: string; start: string; end: string };
+
+export const RESULTS: ReadonlyArray<ResultRow> = [
+  { measure: "Email & WhatsApp list", start: "140", end: "620" },
+  { measure: "Store visits / month", start: "1,900", end: "5,400" },
+  { measure: "Email open rate", start: "—", end: "41%" },
+  { measure: "Content published", start: "0", end: "3 + 12" },
+  { measure: "Pages showing in Google", start: "2", end: "14" },
+  { measure: "Press placements", start: "0", end: "4" },
+];

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body style={{ background: "#141210" }}>
+      <body style={{ background: "var(--background)" }}>
         {/*
           THESIS: KOStyle is an arrival, not a catalogue; this refuses the default content-heavy fashion homepage.
           OWN-WORLD: ink-black ground, bright foreground type, coral-primary signal, and an architectural two-column frame.

@@ -59,13 +59,13 @@
   --radius: 0.5rem;
   --background: oklch(0.109 0.011 13.526);
   --foreground: oklch(1 0 180);
-  --muted: oklch(0.188 0.012 343.279);
+  --muted: oklch(0.205 0.012 343.279);
   --muted-foreground: oklch(0.761 0.011 342.138);
-  --popover: oklch(0.109 0.011 13.526);
+  --popover: oklch(0.16 0.011 13.526);
   --popover-foreground: oklch(1 0 180);
-  --card: oklch(0.109 0.011 13.526);
+  --card: oklch(0.158 0.011 13.526);
   --card-foreground: oklch(1 0 180);
-  --border: oklch(0.241 0.012 13.52);
+  --border: oklch(0.248 0.012 13.52);
   --input: oklch(0.241 0.012 13.52);
   --primary: oklch(0.615 0.147 18.417);
   --primary-foreground: oklch(1 0 180);
@@ -113,33 +113,11 @@ a {
   color: var(--primary-foreground);
 }
 
-main > section {
-  width: calc(100% - 1rem);
-  max-width: 72rem;
-  margin-inline: auto;
-  margin-block: 0.5rem;
-  border-radius: 0.75rem;
-  overflow: hidden;
-}
-
-@media (min-width: 640px) {
-  main > section {
-    width: calc(100% - 2rem);
-    margin-block: 1rem;
-    border-radius: 1rem;
-  }
-}
-
-/* Hide scrollbar for the horizontally scrollable header nav on small screens */
+/* Hide scrollbar for horizontally scrollable regions (e.g. wide tables) */
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-main > section h2 {
-  border-bottom: 0 !important;
-  padding-bottom: 0 !important;
 }

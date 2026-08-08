@@ -1,46 +1,40 @@
-import Image from "next/image";
+"use client";
 
-const navItems = [
-  { label: "Overview", href: "#home" },
-  { label: "Roadmap", href: "#roadmap" },
-  { label: "Campaigns", href: "#drop-kit" },
-  { label: "Articles", href: "#articles" },
-  { label: "Results", href: "#results" },
-];
+import { Menu } from "lucide-react";
 
-export default function Header() {
+interface HeaderProps {
+  onMenu: () => void;
+  done: number;
+  total: number;
+}
+
+export default function Header({ onMenu, done, total }: HeaderProps) {
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-background border-b border-border">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 h-16 flex items-center justify-between gap-4">
-        <a
-          href="#home"
-          aria-label="Kostyle growth plan home"
-          className="flex items-center gap-2 no-underline shrink-0"
-        >
-          <Image
-            src="/kostyle-logo-dark.png"
-            alt="Kostyle"
-            width={120}
-            height={32}
-            className="h-8 w-auto object-contain"
-            priority
-          />
-        </a>
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/85 px-4 backdrop-blur sm:px-6 lg:px-8">
+      <button
+        type="button"
+        onClick={onMenu}
+        aria-label="Open navigation"
+        className="-ml-1 flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:hidden"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
 
-        <nav
-          aria-label="Primary navigation"
-          className="flex items-center gap-4 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0"
-        >
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="font-heading text-xs sm:text-sm tracking-[.12em] uppercase text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+      <div className="min-w-0 flex-1">
+        <h1 className="truncate font-heading text-base font-medium tracking-tight text-foreground sm:text-lg">
+          Marketing Deliverables Growth Pack
+        </h1>
+        <p className="hidden truncate text-xs text-muted-foreground sm:block">
+          KOStyle · Aug – Dec 2026
+        </p>
+      </div>
+
+      <div className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1.5">
+        <span className="h-2 w-2 rounded-full bg-accent" aria-hidden />
+        <span className="font-heading text-xs font-semibold uppercase tracking-[.08em] text-foreground">
+          {done}/{total}
+        </span>
+        <span className="hidden text-xs text-muted-foreground sm:inline">delivered</span>
       </div>
     </header>
   );
