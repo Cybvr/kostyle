@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "KOStyle — Welcome",
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           FORM: assigned grounded direction 6 from the persuade surface seed; high-contrast editorial arrival screen.
           FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
         */}
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );

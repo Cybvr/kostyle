@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import Header from "@/components/Header";
 import { SideNav } from "@/components/SideNav";
+import { MediaCard } from "@/components/MediaCard";
+import { AddCard } from "@/components/AddCard";
+import { ImageDropField } from "@/components/ImageDropField";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -33,7 +35,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Pencil, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import { MdFolder } from "react-icons/md";
 import {
   ARTICLES,
   AS_SEEN_IN,
@@ -110,7 +113,7 @@ function getDraft(content: EditableContent, section: EditorSection, index: numbe
     }
     case "campaigns": {
       const item = content.campaigns[index];
-      return { label: item.label, copy: item.copy };
+      return { label: item.label, copy: item.copy, image: item.image ?? "" };
     }
     case "whatsapp": {
       const item = content.quickReplies[index];
@@ -130,7 +133,7 @@ function getDraft(content: EditableContent, section: EditorSection, index: numbe
       return { founderStory: content.founderStory, pressKitUrl: content.pressKitUrl };
     case "outreach": {
       const item = content.outreach[index];
-      return { kind: item.kind, subject: item.subject, body: item.body };
+      return { kind: item.kind, subject: item.subject, body: item.body, image: item.image ?? "" };
     }
     case "as-seen-in": {
       const item = content.asSeenIn[index];
@@ -148,7 +151,7 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
     case "roadmap":
       return { task: "", desc: "", unit: "" };
     case "campaigns":
-      return { label: "New campaign", copy: "" };
+      return { label: "New campaign", copy: "", image: "" };
     case "whatsapp":
       return { cmd: "/new", reply: "" };
     case "win-back":
@@ -160,7 +163,7 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
     case "about":
       return { founderStory: content.founderStory, pressKitUrl: content.pressKitUrl };
     case "outreach":
-      return { kind: "New message", subject: "", body: "" };
+      return { kind: "New message", subject: "", body: "", image: "" };
     case "as-seen-in":
       return { name: "New asset", copy: "" };
     case "results":
@@ -172,63 +175,42 @@ function updateAt<T>(items: T[], index: number, update: (item: T) => T) {
   return items.map((item, itemIndex) => (itemIndex === index ? update(item) : item));
 }
 
-function ImageSlot({ placeholder, className = "" }: { placeholder: string; className?: string }) {
+
+/** Right-aligned row action column: copy only — click the row itself to edit. */
+function RowActions({ copyValue }: { copyValue?: string }) {
+  if (copyValue === undefined) return null;
   return (
-    <div className={cn("bg-border/60 flex items-center justify-center rounded-md shrink-0", className)}>
-      <span className="text-muted-foreground text-xs font-heading text-center p-2 leading-snug">
-        {placeholder}
-      </span>
+    <div className="flex items-center justify-end" onClick={(event) => event.stopPropagation()}>
+      <CopyButton value={copyValue} />
     </div>
   );
 }
 
-function MediaCard({
-  image,
-  eyebrow,
-  title,
+/** Row wrapper: click anywhere to open the edit sheet, matching MediaCard's click-to-edit pattern. */
+function EditableRow({
+  onEdit,
+  className,
   children,
 }: {
-  image: string;
-  eyebrow?: string;
-  title: string;
+  onEdit: () => void;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <Card className="gap-0 overflow-hidden border-border bg-background/40 py-0">
-      <ImageSlot placeholder={image} className="h-36 w-full rounded-none" />
-      <div className="flex flex-col gap-1 px-4 pt-4">
-        {eyebrow ? (
-          <span className="font-heading text-[11px] font-semibold uppercase tracking-[.12em] text-accent">
-            {eyebrow}
-          </span>
-        ) : null}
-        <CardTitle className="font-heading text-sm font-semibold tracking-tight text-foreground">
-          {title}
-        </CardTitle>
-      </div>
-      <CardContent className="px-4 pb-4 pt-3">{children}</CardContent>
-    </Card>
-  );
-}
-
-/** Right-aligned row action column: copy + edit. */
-function RowActions({ copyValue, onEdit }: { copyValue?: string; onEdit?: () => void }) {
-  return (
-    <div className="flex items-center justify-end gap-0.5">
-      {copyValue !== undefined ? <CopyButton value={copyValue} /> : null}
-      {onEdit ? (
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-xs"
-          onClick={onEdit}
-          aria-label="Edit"
-          className="text-foreground/40 hover:text-accent"
-        >
-          <Pencil className="size-3.5" />
-        </Button>
-      ) : null}
-    </div>
+    <TableRow
+      role="button"
+      tabIndex={0}
+      onClick={onEdit}
+      onKeyDown={(event: KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onEdit();
+        }
+      }}
+      className={cn("cursor-pointer hover:bg-muted/40", className)}
+    >
+      {children}
+    </TableRow>
   );
 }
 
@@ -253,7 +235,7 @@ function Panel({
     <Card id={id} className={cn("scroll-mt-20 gap-0 overflow-hidden py-0", className)}>
       <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
         <div>
-          <h2 className="font-heading text-lg font-medium leading-none tracking-tight text-foreground">
+          <h2 className="font-heading text-sm font-medium leading-none tracking-tight text-foreground">
             {title}
           </h2>
         </div>
@@ -287,8 +269,8 @@ function EditorField({
   children: ReactNode;
 }) {
   return (
-    <div className="space-y-2">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-foreground">
+    <div className="space-y-1.5">
+      <label htmlFor={htmlFor} className="font-heading text-[10px] font-semibold uppercase tracking-[.08em] text-muted-foreground">
         {label}
       </label>
       {children}
@@ -388,7 +370,13 @@ export default function Home() {
               ],
             };
           case "campaigns":
-            return { ...prev, campaigns: [...prev.campaigns, { label: draft.label ?? "New campaign", copy: draft.copy ?? "" }] };
+            return {
+              ...prev,
+              campaigns: [
+                ...prev.campaigns,
+                { label: draft.label ?? "New campaign", copy: draft.copy ?? "", image: draft.image || undefined },
+              ],
+            };
           case "whatsapp":
             return {
               ...prev,
@@ -401,7 +389,13 @@ export default function Home() {
           case "seo":
             return { ...prev, seo: [...prev.seo, { page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "", copy: true }] };
           case "outreach":
-            return { ...prev, outreach: [...prev.outreach, { kind: draft.kind ?? "New message", subject: draft.subject ?? "", body: draft.body ?? "" }] };
+            return {
+              ...prev,
+              outreach: [
+                ...prev.outreach,
+                { kind: draft.kind ?? "New message", subject: draft.subject ?? "", body: draft.body ?? "", image: draft.image || undefined },
+              ],
+            };
           case "as-seen-in":
             return { ...prev, asSeenIn: [...prev.asSeenIn, { name: draft.name ?? "New asset", copy: draft.copy ?? "" }] };
           case "results":
@@ -433,6 +427,7 @@ export default function Home() {
               ...item,
               label: draft.label ?? "",
               copy: draft.copy ?? "",
+              image: draft.image || undefined,
             })),
           };
         case "whatsapp":
@@ -475,6 +470,7 @@ export default function Home() {
               kind: draft.kind ?? "",
               subject: draft.subject ?? "",
               body: draft.body ?? "",
+              image: draft.image || undefined,
             })),
           };
         case "as-seen-in":
@@ -568,6 +564,12 @@ export default function Home() {
       case "campaigns":
         return (
           <div className="space-y-5">
+            <EditorField label="Image">
+              <ImageDropField
+                value={draft.image || undefined}
+                onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
+              />
+            </EditorField>
             {itemPicker}
             <EditorField label="Card title" htmlFor="editor-label">
               <Input id="editor-label" value={draft.label ?? ""} onChange={(event) => updateDraft("label", event.target.value)} />
@@ -639,6 +641,12 @@ export default function Home() {
       case "outreach":
         return (
           <div className="space-y-5">
+            <EditorField label="Image">
+              <ImageDropField
+                value={draft.image || undefined}
+                onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
+              />
+            </EditorField>
             {itemPicker}
             <EditorField label="Type" htmlFor="editor-kind">
               <Input id="editor-kind" value={draft.kind ?? ""} onChange={(event) => updateDraft("kind", event.target.value)} />
@@ -693,16 +701,17 @@ export default function Home() {
         onToggleCollapse={() => setCollapsed((value) => !value)}
       />
 
-      <div className={cn("transition-[padding] duration-200", collapsed ? "lg:pl-16" : "lg:pl-64")}>
+      <div className={cn("transition-[padding] duration-200", collapsed ? "lg:pl-16" : "lg:pl-56")}>
         <Header onMenu={() => setNavOpen(true)} done={doneCount} total={total} />
 
         <main id="main-content" className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           {/* ── Overview ── */}
           <section id="overview" className="scroll-mt-20">
             <div className="mb-5">
-              <h2 className="font-heading text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
+              <h2 className="font-heading text-xl font-medium tracking-tight text-foreground sm:text-2xl">
                 Overview
               </h2>
+              <p className="mt-1 text-sm text-muted-foreground">KOStyle · Aug – Dec 2026</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -788,12 +797,25 @@ export default function Home() {
 
             {/* Campaigns: Drop kit */}
             <Panel id="campaigns" title="Drop campaign kit" onAdd={() => openEditor("campaigns")} className="lg:col-span-2">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {content.campaigns.map(({ label, copy }) => (
-                  <MediaCard key={label} image="Clip / photo of the piece" title={label}>
-                    <CopyBox value={copy} />
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {content.campaigns.map(({ label, copy, image }, index) => (
+                  <MediaCard
+                    key={label}
+                    image={
+                      image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={image} alt="" className="size-full object-cover" />
+                      ) : (
+                        <MdFolder aria-hidden="true" className="size-8 text-muted-foreground" />
+                      )
+                    }
+                    title={label}
+                    onClick={() => openEditor("campaigns", index, "edit")}
+                  >
+                    <CopyBox value={copy} textClassName="line-clamp-7" />
                   </MediaCard>
                 ))}
+                <AddCard label="New campaign" onClick={() => openEditor("campaigns")} />
               </div>
             </Panel>
 
@@ -814,13 +836,13 @@ export default function Home() {
                 </TableHeader>
                 <TableBody>
                   {content.quickReplies.map(({ cmd, reply }, index) => (
-                    <TableRow key={cmd} className="border-border align-top">
+                    <EditableRow key={cmd} className="border-border align-top" onEdit={() => openEditor("whatsapp", index, "edit")}>
                       <TableCell className="font-mono font-semibold text-accent">{cmd}</TableCell>
                       <TableCell className="whitespace-normal text-foreground/80">{reply}</TableCell>
                       <TableCell>
-                        <RowActions copyValue={reply} onEdit={() => openEditor("whatsapp", index, "edit")} />
+                        <RowActions copyValue={reply} />
                       </TableCell>
-                    </TableRow>
+                    </EditableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -840,13 +862,13 @@ export default function Home() {
                 </TableHeader>
                 <TableBody>
                   {content.winBack.map(({ name, copy }, index) => (
-                    <TableRow key={name} className="border-border align-top">
+                    <EditableRow key={name} className="border-border align-top" onEdit={() => openEditor("win-back", index, "edit")}>
                       <TableCell className="font-semibold text-foreground">{name}</TableCell>
                       <TableCell className="whitespace-normal text-foreground/80">{copy}</TableCell>
                       <TableCell>
-                        <RowActions copyValue={copy} onEdit={() => openEditor("win-back", index, "edit")} />
+                        <RowActions copyValue={copy} />
                       </TableCell>
-                    </TableRow>
+                    </EditableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -865,12 +887,12 @@ export default function Home() {
                 </TableHeader>
                 <TableBody>
                   {content.articles.map((title, index) => (
-                    <TableRow key={title} className="border-border">
+                    <EditableRow key={title} className="border-border" onEdit={() => openEditor("articles", index, "edit")}>
                       <TableCell className="whitespace-normal text-foreground">{title}</TableCell>
                       <TableCell>
-                        <RowActions copyValue={title} onEdit={() => openEditor("articles", index, "edit")} />
+                        <RowActions copyValue={title} />
                       </TableCell>
-                    </TableRow>
+                    </EditableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -891,17 +913,14 @@ export default function Home() {
                   </TableHeader>
                   <TableBody>
                     {content.seo.map(({ page, title, desc }, index) => (
-                      <TableRow key={page} className="border-border align-top">
+                      <EditableRow key={page} className="border-border align-top" onEdit={() => openEditor("seo", index, "edit")}>
                         <TableCell className="font-semibold text-foreground">{page}</TableCell>
                         <TableCell className="whitespace-normal font-medium text-foreground">{title}</TableCell>
                         <TableCell className="whitespace-normal text-muted-foreground">{desc}</TableCell>
                         <TableCell>
-                          <RowActions
-                            copyValue={desc}
-                            onEdit={() => openEditor("seo", index, "edit")}
-                          />
+                          <RowActions copyValue={desc} />
                         </TableCell>
-                      </TableRow>
+                      </EditableRow>
                     ))}
                   </TableBody>
               </Table>
@@ -941,14 +960,28 @@ export default function Home() {
 
             {/* Outreach */}
             <Panel id="outreach" title="Outreach" onAdd={() => openEditor("outreach")} className="lg:col-span-2">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {content.outreach.map(({ kind, subject, body }) => (
-                  <MediaCard key={kind} image={`${kind} visual`} eyebrow={kind} title={subject}>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {content.outreach.map(({ kind, subject, body, image }, index) => (
+                  <MediaCard
+                    key={kind}
+                    image={
+                      image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={image} alt="" className="size-full object-cover" />
+                      ) : (
+                        <MdFolder aria-hidden="true" className="size-8 text-muted-foreground" />
+                      )
+                    }
+                    eyebrow={kind}
+                    title={subject}
+                    onClick={() => openEditor("outreach", index, "edit")}
+                  >
                     <CopyBox value={`Subject: ${subject}\n\n${body}`}>
-                      <p className="m-0">{body}</p>
+                      <p className="m-0 line-clamp-7">{body}</p>
                     </CopyBox>
                   </MediaCard>
                 ))}
+                <AddCard label="New outreach message" onClick={() => openEditor("outreach")} />
               </div>
             </Panel>
 
@@ -966,13 +999,13 @@ export default function Home() {
                 </TableHeader>
                 <TableBody>
                   {content.asSeenIn.map(({ name, copy }, index) => (
-                    <TableRow key={name} className="border-border align-top">
+                    <EditableRow key={name} className="border-border align-top" onEdit={() => openEditor("as-seen-in", index, "edit")}>
                       <TableCell className="font-semibold text-foreground">{name}</TableCell>
                       <TableCell className="whitespace-normal text-foreground/80">{copy}</TableCell>
                       <TableCell>
-                        <RowActions copyValue={copy} onEdit={() => openEditor("as-seen-in", index, "edit")} />
+                        <RowActions copyValue={copy} />
                       </TableCell>
-                    </TableRow>
+                    </EditableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -1020,9 +1053,6 @@ export default function Home() {
             <SheetTitle className="font-heading text-xl font-medium tracking-tight">
               {editor ? `${editor.mode === "add" ? "Add" : "Edit"} ${editorTitles[editor.section]}` : "Edit content"}
             </SheetTitle>
-            <SheetDescription>
-              Make changes to this content. Nothing changes on the page until you save.
-            </SheetDescription>
           </SheetHeader>
           <div className="flex-1 overflow-y-auto px-6 py-6">{renderEditorForm()}</div>
           <SheetFooter className="border-t border-border px-6 py-4 sm:flex-row sm:justify-end">

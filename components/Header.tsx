@@ -21,12 +21,9 @@ export default function Header({ onMenu, done, total }: HeaderProps) {
       </button>
 
       <div className="min-w-0 flex-1">
-        <h1 className="truncate font-heading text-base font-medium tracking-tight text-foreground sm:text-lg">
+        <h1 className="truncate font-heading text-base font-medium tracking-tight text-foreground sm:text-sm">
           Marketing Deliverables Growth Pack
         </h1>
-        <p className="hidden truncate text-xs text-muted-foreground sm:block">
-          KOStyle · Aug – Dec 2026
-        </p>
       </div>
 
       <div className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1.5">

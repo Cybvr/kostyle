@@ -1,26 +1,26 @@
+import type { IconType } from "react-icons";
 import {
-  BarChart3,
-  FileText,
-  Info,
-  LayoutDashboard,
-  ListChecks,
-  Megaphone,
-  Search,
-  Send,
-  type LucideIcon,
-} from "lucide-react";
+  MdArticle,
+  MdBarChart,
+  MdCampaign,
+  MdChecklist,
+  MdDashboard,
+  MdInfo,
+  MdSearch,
+  MdSend,
+} from "react-icons/md";
 
-export type NavItem = { id: string; label: string; icon: LucideIcon };
+export type NavItem = { id: string; label: string; icon: IconType };
 
 export const NAV: ReadonlyArray<NavItem> = [
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "roadmap", label: "Roadmap", icon: ListChecks },
-  { id: "campaigns", label: "Campaigns", icon: Megaphone },
-  { id: "articles", label: "Articles", icon: FileText },
-  { id: "seo", label: "SEO", icon: Search },
-  { id: "about", label: "About", icon: Info },
-  { id: "outreach", label: "Outreach", icon: Send },
-  { id: "results", label: "Results", icon: BarChart3 },
+  { id: "overview", label: "Overview", icon: MdDashboard },
+  { id: "roadmap", label: "Roadmap", icon: MdChecklist },
+  { id: "campaigns", label: "Campaigns", icon: MdCampaign },
+  { id: "articles", label: "Articles", icon: MdArticle },
+  { id: "seo", label: "SEO", icon: MdSearch },
+  { id: "about", label: "About", icon: MdInfo },
+  { id: "outreach", label: "Outreach", icon: MdSend },
+  { id: "results", label: "Results", icon: MdBarChart },
 ];
 
 export type RoadmapItem = { n: number; task: string; desc: string; unit: string };
@@ -47,7 +47,7 @@ export const STATS: ReadonlyArray<Stat> = [
   { label: "Press placements", start: "0", end: "4" },
 ];
 
-export type DropPost = { label: string; copy: string };
+export type DropPost = { label: string; copy: string; image?: string };
 
 export const DROP_KIT: ReadonlyArray<DropPost> = [
   {
@@ -106,7 +106,7 @@ export const FOUNDER_STORY =
 
 export const PRESS_KIT_URL = "http://kostyle.ae/presskit";
 
-export type OutreachMessage = { kind: string; subject: string; body: string };
+export type OutreachMessage = { kind: string; subject: string; body: string; image?: string };
 
 export const OUTREACH: ReadonlyArray<OutreachMessage> = [
   {

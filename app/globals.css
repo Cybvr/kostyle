@@ -1,5 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=EB+Garamond:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+/* Bind the `dark:` variant to the .dark class (set by the theme toggle),
+   instead of Tailwind v4's default `prefers-color-scheme` media query. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -29,58 +33,58 @@
 
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.99 0.003 12.49);
-  --foreground: oklch(0.081 0.017 14.985);
-  --muted: oklch(0.935 0.008 342.013);
-  --muted-foreground: oklch(0.413 0.012 342.509);
-  --popover: oklch(0.99 0.003 12.49);
-  --popover-foreground: oklch(0.081 0.017 14.985);
-  --card: oklch(0.99 0.003 12.49);
-  --card-foreground: oklch(0.081 0.017 14.985);
-  --border: oklch(0.935 0.005 12.545);
-  --input: oklch(0.935 0.005 12.545);
-  --primary: oklch(0.615 0.147 18.417);
-  --primary-foreground: oklch(1 0 180);
-  --secondary: oklch(0.632 0.163 347.667);
-  --secondary-foreground: oklch(0 0 0);
-  --accent: oklch(0.696 0.104 57.412);
-  --accent-foreground: oklch(0 0 0);
-  --destructive: oklch(0.488 0.145 41.271);
-  --destructive-foreground: oklch(1 0 180);
-  --ring: oklch(0.615 0.147 18.417);
-  --chart-1: oklch(0.615 0.147 18.417);
-  --chart-2: oklch(0.632 0.163 347.667);
-  --chart-3: oklch(0.696 0.104 57.412);
-  --chart-4: oklch(0.656 0.152 347.001);
-  --chart-5: oklch(0.615 0.155 18.847);
+  --background: #f8f9fc;
+  --foreground: #292b3c;
+  --muted: #eef0f7;
+  --muted-foreground: #777b91;
+  --popover: #ffffff;
+  --popover-foreground: #292b3c;
+  --card: #ffffff;
+  --card-foreground: #292b3c;
+  --border: #e1e4ee;
+  --input: #d8dce8;
+  --primary: #625bff;
+  --primary-foreground: #ffffff;
+  --secondary: #eceef6;
+  --secondary-foreground: #292b3c;
+  --accent: #625bff;
+  --accent-foreground: #ffffff;
+  --destructive: #d84d61;
+  --destructive-foreground: #ffffff;
+  --ring: #625bff;
+  --chart-1: #625bff;
+  --chart-2: #8d86ff;
+  --chart-3: #aeb2c5;
+  --chart-4: #4c4f64;
+  --chart-5: #292b3c;
 }
 
 .dark {
   --radius: 0.5rem;
-  --background: oklch(0.109 0.011 13.526);
-  --foreground: oklch(1 0 180);
-  --muted: oklch(0.205 0.012 343.279);
-  --muted-foreground: oklch(0.761 0.011 342.138);
-  --popover: oklch(0.16 0.011 13.526);
-  --popover-foreground: oklch(1 0 180);
-  --card: oklch(0.158 0.011 13.526);
-  --card-foreground: oklch(1 0 180);
-  --border: oklch(0.248 0.012 13.52);
-  --input: oklch(0.241 0.012 13.52);
-  --primary: oklch(0.615 0.147 18.417);
-  --primary-foreground: oklch(1 0 180);
-  --secondary: oklch(0.632 0.163 347.667);
-  --secondary-foreground: oklch(0 0 0);
-  --accent: oklch(0.696 0.104 57.412);
-  --accent-foreground: oklch(0 0 0);
-  --destructive: oklch(0.675 0.192 42.178);
-  --destructive-foreground: oklch(0 0 0);
-  --ring: oklch(0.615 0.147 18.417);
-  --chart-1: oklch(0.615 0.147 18.417);
-  --chart-2: oklch(0.632 0.163 347.667);
-  --chart-3: oklch(0.696 0.104 57.412);
-  --chart-4: oklch(0.656 0.152 347.001);
-  --chart-5: oklch(0.615 0.155 18.847);
+  --background: #11121c;
+  --foreground: #f4f4fa;
+  --muted: #1b1e2c;
+  --muted-foreground: #989bad;
+  --popover: #171925;
+  --popover-foreground: #f4f4fa;
+  --card: #202333;
+  --card-foreground: #f4f4fa;
+  --border: #2d3044;
+  --input: #303349;
+  --primary: #625bff;
+  --primary-foreground: #ffffff;
+  --secondary: #292c3f;
+  --secondary-foreground: #f4f4fa;
+  --accent: #6d66ff;
+  --accent-foreground: #ffffff;
+  --destructive: #f06a7b;
+  --destructive-foreground: #1b1015;
+  --ring: #6d66ff;
+  --chart-1: #6d66ff;
+  --chart-2: #9d98ff;
+  --chart-3: #63677d;
+  --chart-4: #45495f;
+  --chart-5: #f4f4fa;
 }
 
 * {
@@ -100,7 +104,7 @@ body {
 }
 
 .font-heading {
-  font-family: "Antonio", "Arial Narrow", sans-serif;
+  font-family: "Inter", "Segoe UI", sans-serif;
 }
 
 a {

@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface SideNavProps {
   items: ReadonlyArray<NavItem>;
@@ -86,15 +88,15 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
       <nav
         aria-label="Dashboard sections"
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-background transition-[width,transform] duration-200 lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex w-56 flex-col border-r border-border bg-background transition-[width,transform] duration-200 lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",
-          collapsed ? "lg:w-16" : "lg:w-64",
+          collapsed ? "lg:w-16" : "lg:w-56",
         )}
       >
         {/* Brand + collapse toggle */}
         <div
           className={cn(
-            "flex h-16 shrink-0 items-center border-b border-border px-4",
+            "flex h-16 shrink-0 items-center px-4",
             collapsed ? "lg:justify-center lg:px-0" : "justify-between",
           )}
         >
@@ -106,19 +108,24 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
             className={cn("h-7 w-auto object-contain dark:brightness-0 dark:invert", collapsed && "lg:hidden")}
             priority
           />
-          <button
-            type="button"
-            onClick={onToggleCollapse}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="hidden size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:flex"
-          >
-            {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={onToggleCollapse}
+                aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                className="hidden size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:flex"
+              >
+                {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right">{collapsed ? "Expand sidebar" : "Collapse sidebar"}</TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Nav */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden py-3">
-          {items.map(({ id, label }) => {
+          {items.map(({ id, label, icon: Icon }) => {
             const isActive = active === id;
             return (
               <a
@@ -128,21 +135,21 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
                 aria-current={isActive ? "location" : undefined}
                 title={collapsed ? label : undefined}
                 className={cn(
-                  "group relative flex items-center gap-3 px-5 py-2.5 text-left transition-colors",
+                  "group relative flex items-center gap-3 px-4 py-2.5 text-left transition-colors",
                   collapsed && "lg:justify-center lg:px-0",
                   isActive ? "text-accent" : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                <span
-                  aria-hidden
+                <Icon
                   className={cn(
-                    "size-1.5 shrink-0 rounded-full bg-current transition-transform",
-                    isActive ? "scale-125 text-accent" : "text-muted-foreground/50 group-hover:text-foreground",
+                    "size-[18px] shrink-0 transition-colors",
+                    isActive ? "text-accent" : "text-muted-foreground group-hover:text-foreground",
                   )}
+                  aria-hidden
                 />
                 <span
                   className={cn(
-                    "font-heading text-[13px] uppercase tracking-[.1em]",
+                    "font-heading text-[13px] tracking-[.02em]",
                     collapsed && "lg:hidden",
                   )}
                 >
@@ -154,7 +161,7 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
         </div>
 
         {/* Profile */}
-        <div className={cn("shrink-0 border-t border-border p-3", collapsed && "lg:px-2")}>
+        <div className={cn("shrink-0 p-3", collapsed && "lg:px-2")}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
@@ -165,9 +172,11 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
                   collapsed && "lg:justify-center lg:px-0",
                 )}
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent font-heading text-sm font-semibold text-accent-foreground">
-                  AH
-                </span>
+                <Avatar className="size-9 rounded-md">
+                  <AvatarFallback className="rounded-md bg-accent font-heading text-sm font-semibold text-accent-foreground">
+                    AH
+                  </AvatarFallback>
+                </Avatar>
                 <span className={cn("min-w-0 flex-1", collapsed && "lg:hidden")}>
                   <span className="block truncate text-sm font-semibold text-foreground">Ali Hamze</span>
                   <span className="block truncate text-xs text-muted-foreground">ali@kostyle.ae</span>

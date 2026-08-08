@@ -43,28 +43,30 @@ interface CopyBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
   /** Optional small label shown above the text (e.g. "TEASER · 3–5 DAYS OUT"). */
   label?: string;
+  /** Extra classes for the text node itself, e.g. "line-clamp-7" to truncate long copy. */
+  textClassName?: string;
 }
 
-export function CopyBox({ value, label, className, children, ...props }: CopyBoxProps) {
+export function CopyBox({ value, label, className, textClassName, children, ...props }: CopyBoxProps) {
   return (
     <div
       className={cn(
-        "group relative border border-current/15 p-4 pr-10 text-foreground",
+        "group relative rounded-md border border-current/15 p-2 pr-8 text-foreground",
         className,
       )}
       {...props}
     >
       {label && (
-        <div className="font-heading font-semibold text-xs tracking-[.08em] uppercase text-accent mb-2">
+        <div className="mb-1 font-heading text-[10px] font-semibold uppercase tracking-[.08em] text-accent">
           {label}
         </div>
       )}
 
-      <div className="text-sm leading-relaxed text-foreground/80 whitespace-pre-line">
+      <div className={cn("text-xs leading-snug text-foreground/80 whitespace-pre-line", textClassName)}>
         {children ?? value}
       </div>
 
-      <CopyButton value={value} className="absolute right-2 top-2 size-7" />
+      <CopyButton value={value} className="absolute right-1 top-1 size-6" />
     </div>
   );
 }
