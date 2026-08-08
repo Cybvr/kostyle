@@ -1,0 +1,9 @@
+{
+  "firestore": [
+    {
+      "database": "kostyle",
+      "rules": "firestore.kostyle.rules",
+      "indexes": "firestore.kostyle.indexes.json"
+    }
+  ]
+}

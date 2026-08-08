@@ -137,3 +137,32 @@ export const RESULTS: ReadonlyArray<ResultRow> = [
   { measure: "Pages showing in Google", start: "2", end: "14" },
   { measure: "Press placements", start: "0", end: "4" },
 ];
+
+export type EditableContent = {
+  roadmap: RoadmapItem[];
+  campaigns: DropPost[];
+  quickReplies: { cmd: string; reply: string }[];
+  winBack: NamedCopy[];
+  articles: string[];
+  seo: SeoRow[];
+  founderStory: string;
+  pressKitUrl: string;
+  outreach: OutreachMessage[];
+  asSeenIn: NamedCopy[];
+  results: ResultRow[];
+};
+
+/** Local seed used to create the first Firestore workspace document. */
+export const INITIAL_CONTENT: EditableContent = {
+  roadmap: ROADMAP.map((item) => ({ ...item })),
+  campaigns: DROP_KIT.map((item) => ({ ...item })),
+  quickReplies: QUICK_REPLIES.map((item) => ({ ...item })),
+  winBack: WIN_BACK.map((item) => ({ ...item })),
+  articles: [...ARTICLES],
+  seo: SEO_ROWS.map((item) => ({ ...item })),
+  founderStory: FOUNDER_STORY,
+  pressKitUrl: PRESS_KIT_URL,
+  outreach: OUTREACH.map((item) => ({ ...item })),
+  asSeenIn: AS_SEEN_IN.map((item) => ({ ...item })),
+  results: RESULTS.map((item) => ({ ...item })),
+};
