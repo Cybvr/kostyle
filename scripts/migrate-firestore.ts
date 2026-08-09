@@ -27,6 +27,7 @@ async function main() {
 
   const after = await workspace.get();
   const data = after.data() ?? {};
+  const quickReplies = Array.isArray(data.quickReplies) ? data.quickReplies : [];
   const campaignImages = Array.isArray(data.campaigns)
     ? data.campaigns.filter((item) => item && typeof item === "object" && "image" in item).length
     : 0;
@@ -40,6 +41,8 @@ async function main() {
     path: "workspaces/kostyle",
     existedBefore: before.exists,
     fieldsWritten: Object.keys(INITIAL_CONTENT),
+    quickReplyCount: quickReplies.length,
+    quickReplyTitles: quickReplies.map((item) => item && typeof item === "object" && "title" in item ? item.title : null),
     campaignImageFields: campaignImages,
     outreachImageFields: outreachImages,
   }, null, 2));

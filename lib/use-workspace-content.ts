@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db, firebaseConfigured } from "@/lib/firebase";
-import { INITIAL_CONTENT, type EditableContent } from "@/lib/data";
+import { INITIAL_CONTENT, type EditableContent, type QuickReply } from "@/lib/data";
 
 const LOCAL_CONTENT_KEY = "kostyle-editable-content";
 const WORKSPACE_REF = db ? doc(db, "workspaces", "kostyle") : null;
@@ -20,13 +20,37 @@ function removeUndefined(value: unknown): unknown {
   return value;
 }
 
+function normalizeQuickReplies(value: unknown): QuickReply[] | null {
+  if (!Array.isArray(value)) return null;
+
+  return value.map((item, index) => {
+    const record = item && typeof item === "object" ? item as Record<string, unknown> : {};
+    const legacyCommand = typeof record.cmd === "string" ? record.cmd.replace(/^\/+/, "") : "";
+    const fallbackTitle = legacyCommand
+      ? legacyCommand.charAt(0).toUpperCase() + legacyCommand.slice(1)
+      : `Response ${index + 1}`;
+
+    return {
+      title: typeof record.title === "string" && record.title.trim() ? record.title : fallbackTitle,
+      conversation:
+        typeof record.conversation === "string"
+          ? record.conversation
+          : typeof record.reply === "string"
+            ? record.reply
+            : "",
+    };
+  });
+}
+
 function mergeContent(value: Record<string, unknown>): EditableContent {
+  const quickReplies = normalizeQuickReplies(value.quickReplies);
+
   return {
     ...INITIAL_CONTENT,
     ...value,
     roadmap: Array.isArray(value.roadmap) ? value.roadmap : INITIAL_CONTENT.roadmap,
     campaigns: Array.isArray(value.campaigns) ? value.campaigns : INITIAL_CONTENT.campaigns,
-    quickReplies: Array.isArray(value.quickReplies) ? value.quickReplies : INITIAL_CONTENT.quickReplies,
+    quickReplies: quickReplies ?? INITIAL_CONTENT.quickReplies,
     winBack: Array.isArray(value.winBack) ? value.winBack : INITIAL_CONTENT.winBack,
     articles: Array.isArray(value.articles) ? value.articles : INITIAL_CONTENT.articles,
     seo: Array.isArray(value.seo) ? value.seo : INITIAL_CONTENT.seo,

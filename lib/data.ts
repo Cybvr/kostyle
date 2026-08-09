@@ -64,15 +64,13 @@ export const DROP_KIT: ReadonlyArray<DropPost> = [
   },
 ];
 
-export type QuickReply = { cmd: string; reply: string };
+export type QuickReply = { title: string; conversation: string };
 
 export const QUICK_REPLIES: ReadonlyArray<QuickReply> = [
-  { cmd: "/hi", reply: "Thanks for messaging Kostyle. Tell us the item and size and we will check stock." },
-  { cmd: "/price", reply: "That piece is [AED price]. Free UAE shipping over AED 250." },
-  { cmd: "/sizes", reply: "It comes in S to XL. Send your usual size and we will tell you how it runs." },
-  { cmd: "/pay", reply: "Card, bank transfer, or cash on delivery. We ship once payment is confirmed." },
-  { cmd: "/ship", reply: "We ship from Dubai in 1–2 days. UAE delivery takes 2–4 days." },
-  { cmd: "/done", reply: "Order confirmed. We will send tracking once it ships. Thanks for supporting Kostyle." },
+  {
+    title: "First Visit",
+    conversation: "C: How much is this piece?\nKO: It’s [AED price]. UAE shipping is free for orders over AED 250.\nC: What sizes do you have?\nKO: It comes in sizes S to XL. Send us your usual size and we’ll let you know how it fits.\nC: How can I pay?\nKO: You can pay by card, bank transfer, or cash on delivery. We’ll ship once payment is confirmed.\nC: How long will delivery take?\nKO: We ship from Dubai within 1–2 days. UAE delivery usually takes 2–4 days.\nC: I’d like to place the order.\nKO: Your order is confirmed. We’ll send your tracking details once it ships. Thanks for supporting KOStyle!",
+  },
 ];
 
 export type NamedCopy = { name: string; copy: string };
@@ -141,7 +139,7 @@ export const RESULTS: ReadonlyArray<ResultRow> = [
 export type EditableContent = {
   roadmap: RoadmapItem[];
   campaigns: DropPost[];
-  quickReplies: { cmd: string; reply: string }[];
+  quickReplies: QuickReply[];
   winBack: NamedCopy[];
   articles: string[];
   seo: SeoRow[];

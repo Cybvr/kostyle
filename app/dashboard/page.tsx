@@ -88,7 +88,7 @@ function getDraft(content: EditableContent, section: EditorSection, index: numbe
     }
     case "whatsapp": {
       const item = content.quickReplies[index];
-      return { cmd: item.cmd, reply: item.reply };
+      return { title: item.title, conversation: item.conversation };
     }
     case "win-back": {
       const item = content.winBack[index];
@@ -124,7 +124,7 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
     case "campaigns":
       return { label: "New campaign", copy: "", image: "" };
     case "whatsapp":
-      return { cmd: "/new", reply: "" };
+      return { title: "New response", conversation: "" };
     case "win-back":
       return { name: "New post", copy: "" };
     case "articles":
@@ -182,6 +182,39 @@ function EditableRow({
     >
       {children}
     </TableRow>
+  );
+}
+
+function EditableTemplate({
+  title,
+  conversation,
+  onEdit,
+}: {
+  title: string;
+  conversation: string;
+  onEdit: () => void;
+}) {
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onEdit}
+      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onEdit();
+        }
+      }}
+      className="flex cursor-pointer items-start gap-4 px-4 py-4 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+    >
+      <div className="min-w-0 flex-1">
+        <p className="font-heading text-sm font-semibold tracking-tight text-foreground">{title}</p>
+        <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-foreground/80">{conversation}</p>
+      </div>
+      <div className="shrink-0 pt-0.5" onClick={(event) => event.stopPropagation()}>
+        <CopyButton value={conversation} />
+      </div>
+    </div>
   );
 }
 
@@ -380,7 +413,7 @@ function DashboardWorkspace({ user }: { user: User }) {
             case "campaigns":
               return { ...prev, campaigns: [...prev.campaigns, { label: draft.label ?? "New campaign", copy: draft.copy ?? "", image: uploadedImage }] };
             case "whatsapp":
-              return { ...prev, quickReplies: [...prev.quickReplies, { cmd: draft.cmd ?? "/new", reply: draft.reply ?? "" }] };
+              return { ...prev, quickReplies: [...prev.quickReplies, { title: draft.title ?? "New response", conversation: draft.conversation ?? "" }] };
             case "win-back":
               return { ...prev, winBack: [...prev.winBack, { name: draft.name ?? "New post", copy: draft.copy ?? "" }] };
             case "articles":
@@ -405,7 +438,7 @@ function DashboardWorkspace({ user }: { user: User }) {
             case "campaigns":
               return { ...prev, campaigns: updateAt(prev.campaigns, editor.index, (item) => ({ ...item, label: draft.label ?? "", copy: draft.copy ?? "", image: uploadedImage })) };
             case "whatsapp":
-              return { ...prev, quickReplies: updateAt(prev.quickReplies, editor.index, (item) => ({ ...item, cmd: draft.cmd ?? "", reply: draft.reply ?? "" })) };
+              return { ...prev, quickReplies: updateAt(prev.quickReplies, editor.index, (item) => ({ ...item, title: draft.title ?? "", conversation: draft.conversation ?? "" })) };
             case "win-back":
               return { ...prev, winBack: updateAt(prev.winBack, editor.index, (item) => ({ ...item, name: draft.name ?? "", copy: draft.copy ?? "" })) };
             case "articles":
@@ -466,7 +499,7 @@ function DashboardWorkspace({ user }: { user: User }) {
     ? {
         roadmap: content.roadmap.map((item) => item.task),
         campaigns: content.campaigns.map((item) => item.label),
-        whatsapp: content.quickReplies.map((item) => item.cmd),
+        whatsapp: content.quickReplies.map((item) => item.title),
         "win-back": content.winBack.map((item) => item.name),
         articles: content.articles,
         seo: content.seo.map((item) => item.page),
@@ -480,7 +513,7 @@ function DashboardWorkspace({ user }: { user: User }) {
   const editorTitles: Record<EditorSection, string> = {
     roadmap: "roadmap task",
     campaigns: "campaign copy",
-    whatsapp: "WhatsApp reply",
+    whatsapp: "WhatsApp response template",
     "win-back": "win-back copy",
     articles: "buying-guide article",
     seo: "SEO content",
@@ -548,11 +581,11 @@ function DashboardWorkspace({ user }: { user: User }) {
         return (
           <div className="space-y-5">
             {itemPicker}
-            <EditorField label="Keyword" htmlFor="editor-cmd">
-              <Input id="editor-cmd" value={draft.cmd ?? ""} onChange={(event) => updateDraft("cmd", event.target.value)} />
+            <EditorField label="Response title" htmlFor="editor-title">
+              <Input id="editor-title" value={draft.title ?? ""} onChange={(event) => updateDraft("title", event.target.value)} />
             </EditorField>
-            <EditorField label="Reply" htmlFor="editor-reply">
-              <Textarea id="editor-reply" className="min-h-28" value={draft.reply ?? ""} onChange={(event) => updateDraft("reply", event.target.value)} />
+            <EditorField label="Conversation" htmlFor="editor-conversation">
+              <Textarea id="editor-conversation" className="min-h-56" value={draft.conversation ?? ""} onChange={(event) => updateDraft("conversation", event.target.value)} />
             </EditorField>
           </div>
         );
@@ -794,31 +827,25 @@ function DashboardWorkspace({ user }: { user: User }) {
 
             {/* WhatsApp ordering */}
             <Panel id="whatsapp" title="WhatsApp ordering" onAdd={() => openEditor("whatsapp")}>
-              <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
-                Saved quick replies
+              <h3 className="mb-3 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                Saved response templates
               </h3>
-              <Table className="text-sm">
-                <TableHeader>
-                  <TableRow className="border-b-2 border-border hover:bg-transparent">
-                    <TableHead className={thCls}>Keyword</TableHead>
-                    <TableHead className={thCls}>Response</TableHead>
-                    <TableHead className="w-16">
-                      <span className="sr-only">Actions</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {content.quickReplies.map(({ cmd, reply }, index) => (
-                    <EditableRow key={cmd} className="border-border align-top" onEdit={() => openEditor("whatsapp", index, "edit")}>
-                      <TableCell className="font-mono font-semibold text-accent">{cmd}</TableCell>
-                      <TableCell className="whitespace-normal text-foreground/80">{reply}</TableCell>
-                      <TableCell>
-                        <RowActions copyValue={reply} />
-                      </TableCell>
-                    </EditableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <div className="overflow-hidden rounded-lg border border-border">
+                {content.quickReplies.length > 0 ? (
+                  <div className="divide-y divide-border">
+                    {content.quickReplies.map(({ title, conversation }, index) => (
+                      <EditableTemplate
+                        key={`${title}-${index}`}
+                        title={title}
+                        conversation={conversation}
+                        onEdit={() => openEditor("whatsapp", index, "edit")}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="px-4 py-6 text-sm text-muted-foreground">No response templates yet. Add one to build the ordering flow.</p>
+                )}
+              </div>
             </Panel>
 
             {/* Win-back + referral */}
