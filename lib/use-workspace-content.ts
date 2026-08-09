@@ -59,6 +59,7 @@ function normalizeArticles(value: unknown): Article[] | null {
 
       return {
         title: item,
+        image: undefined,
         excerpt: "",
         body: "",
         tags: ["boxing gloves"],
@@ -76,6 +77,7 @@ function normalizeArticles(value: unknown): Article[] | null {
 
     return {
       title: typeof record.title === "string" && record.title.trim() ? record.title : `Article ${index + 1}`,
+      image: typeof record.image === "string" ? record.image : undefined,
       excerpt: typeof record.excerpt === "string" ? record.excerpt : "",
       body: typeof record.body === "string" ? record.body : typeof record.copy === "string" ? record.copy : "",
       tags: rawTags,

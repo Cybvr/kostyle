@@ -99,6 +99,7 @@ function getDraft(content: EditableContent, section: EditorSection, index: numbe
       const item = content.articles[index];
       return {
         title: item.title,
+        image: item.image ?? "",
         excerpt: item.excerpt,
         body: item.body,
         tags: item.tags.join(", "),
@@ -138,7 +139,7 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
     case "win-back":
       return { name: "New post", copy: "" };
     case "articles":
-      return { title: "", excerpt: "", body: "", tags: "boxing gloves, training", status: "draft", publishDate: "" };
+      return { title: "", image: "", excerpt: "", body: "", tags: "boxing gloves, training", status: "draft", publishDate: "" };
     case "seo":
       return { page: "", title: "", desc: "" };
     case "about":
@@ -432,7 +433,7 @@ function DashboardWorkspace({ user }: { user: User }) {
     setEditorError(null);
 
     try {
-      const uploadedImage = editor.section === "campaigns" || editor.section === "outreach"
+      const uploadedImage = editor.section === "campaigns" || editor.section === "outreach" || editor.section === "articles"
         ? await uploadImageDataUrl(draft.image || undefined, editor.section)
         : undefined;
 
@@ -454,6 +455,7 @@ function DashboardWorkspace({ user }: { user: User }) {
                   ...prev.articles,
                   {
                     title: draft.title ?? "New article",
+                    image: uploadedImage,
                     excerpt: draft.excerpt ?? "",
                     body: draft.body ?? "",
                     tags: parseTags(draft.tags),
@@ -491,6 +493,7 @@ function DashboardWorkspace({ user }: { user: User }) {
                 articles: updateAt(prev.articles, editor.index, (item) => ({
                   ...item,
                   title: draft.title ?? "",
+                  image: uploadedImage,
                   excerpt: draft.excerpt ?? "",
                   body: draft.body ?? "",
                   tags: parseTags(draft.tags),
@@ -660,6 +663,12 @@ function DashboardWorkspace({ user }: { user: User }) {
         return (
           <div className="space-y-5">
             {itemPicker}
+            <EditorField label="Article image">
+              <ImageDropField
+                value={draft.image || undefined}
+                onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
+              />
+            </EditorField>
             <EditorField label="Article title" htmlFor="editor-title">
               <Input id="editor-title" value={draft.title ?? ""} onChange={(event) => updateDraft("title", event.target.value)} />
             </EditorField>
@@ -959,7 +968,14 @@ function DashboardWorkspace({ user }: { user: User }) {
                 {content.articles.map((article, index) => (
                   <MediaCard
                     key={article.title}
-                    image={<MdArticle aria-hidden="true" className="size-8 text-muted-foreground" />}
+                    image={
+                      article.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={article.image} alt="" className="size-full object-cover" />
+                      ) : (
+                        <MdArticle aria-hidden="true" className="size-8 text-muted-foreground" />
+                      )
+                    }
                     eyebrow={article.status === "published" ? "Published" : "Draft"}
                     title={article.title}
                     titleClassName="line-clamp-2 whitespace-normal"

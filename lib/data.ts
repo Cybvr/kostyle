@@ -85,6 +85,7 @@ export const WIN_BACK: ReadonlyArray<NamedCopy> = [
 export type ArticleStatus = "draft" | "published";
 export type Article = {
   title: string;
+  image?: string;
   excerpt: string;
   body: string;
   tags: string[];

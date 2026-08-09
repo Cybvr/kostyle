@@ -8,7 +8,7 @@ function makeAssetId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-export async function uploadImageDataUrl(value: string | undefined, folder: "campaigns" | "outreach") {
+export async function uploadImageDataUrl(value: string | undefined, folder: "campaigns" | "outreach" | "articles") {
   if (!value) return undefined;
   if (!value.startsWith("data:")) return value;
   if (!storage) throw new Error("Firebase Storage is not configured.");
