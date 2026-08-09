@@ -3,6 +3,15 @@ import { storage } from "@/lib/firebase";
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 
+function readFileAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Unable to read that image."));
+    reader.readAsDataURL(file);
+  });
+}
+
 function makeAssetId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -24,4 +33,9 @@ export async function uploadImageDataUrl(value: string | undefined, folder: "cam
   const assetRef = ref(storage, `workspaces/kostyle/${folder}/${makeAssetId()}.${extension}`);
   await uploadString(assetRef, value, "data_url", { contentType });
   return getDownloadURL(assetRef);
+}
+
+export async function uploadImageFile(file: File, folder: "campaigns" | "outreach" | "articles") {
+  if (!file.type.startsWith("image/")) throw new Error("Please drop an image file.");
+  return uploadImageDataUrl(await readFileAsDataUrl(file), folder);
 }

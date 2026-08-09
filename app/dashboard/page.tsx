@@ -56,7 +56,7 @@ import {
   type EditableContent,
 } from "@/lib/data";
 import { auth, enableAuthPersistence, firebaseConfigured } from "@/lib/firebase";
-import { uploadImageDataUrl } from "@/lib/storage";
+import { uploadImageDataUrl, uploadImageFile } from "@/lib/storage";
 import { useWorkspaceContent } from "@/lib/use-workspace-content";
 import { ensureUserProfile, useUserProfile } from "@/lib/user-profile";
 
@@ -76,6 +76,7 @@ type EditorSection =
 
 type EditorState = { section: EditorSection; index: number; mode: "add" | "edit" } | null;
 type EditorDraft = Record<string, string>;
+type ImageSection = "campaigns" | "outreach" | "articles";
 
 function getDraft(content: EditableContent, section: EditorSection, index: number): EditorDraft {
   switch (section) {
@@ -363,6 +364,8 @@ function DashboardWorkspace({ user }: { user: User }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editorError, setEditorError] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState<string | null>(null);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const { content, setContent, error: contentError } = useWorkspaceContent();
   const profile = useUserProfile(user);
   const hydrated = useRef(false);
@@ -418,6 +421,32 @@ function DashboardWorkspace({ user }: { user: User }) {
 
   const updateDraft = (field: string, value: string) => {
     setDraft((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCardImageDrop = async (section: ImageSection, index: number, file: File) => {
+    const uploadKey = `${section}-${index}`;
+    setUploadingImage(uploadKey);
+    setImageUploadError(null);
+
+    try {
+      const image = await uploadImageFile(file, section);
+      if (!image) return;
+
+      setContent((prev) => {
+        switch (section) {
+          case "campaigns":
+            return { ...prev, campaigns: updateAt(prev.campaigns, index, (item) => ({ ...item, image })) };
+          case "outreach":
+            return { ...prev, outreach: updateAt(prev.outreach, index, (item) => ({ ...item, image })) };
+          case "articles":
+            return { ...prev, articles: updateAt(prev.articles, index, (item) => ({ ...item, image })) };
+        }
+      });
+    } catch (uploadError: unknown) {
+      setImageUploadError(uploadError instanceof Error ? uploadError.message : "Unable to upload that image.");
+    } finally {
+      setUploadingImage(null);
+    }
   };
 
   const selectEditorItem = (value: string) => {
@@ -799,6 +828,11 @@ function DashboardWorkspace({ user }: { user: User }) {
             Changes could not be saved. Please try again.
           </div>
         ) : null}
+        {imageUploadError ? (
+          <div className="border-b border-destructive/30 bg-destructive/10 px-4 py-2 text-center text-xs text-destructive sm:px-6 lg:px-8" role="alert">
+            {imageUploadError}
+          </div>
+        ) : null}
 
         <main id="main-content" className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           {/* ── Overview ── */}
@@ -905,6 +939,8 @@ function DashboardWorkspace({ user }: { user: User }) {
                     }
                     title={label}
                     onClick={() => openEditor("campaigns", index, "edit")}
+                    onImageDrop={(file) => handleCardImageDrop("campaigns", index, file)}
+                    imageDropBusy={uploadingImage === `campaigns-${index}`}
                   >
                     <CopyBox value={copy} textClassName="line-clamp-7" />
                   </MediaCard>
@@ -980,6 +1016,8 @@ function DashboardWorkspace({ user }: { user: User }) {
                     title={article.title}
                     titleClassName="line-clamp-2 whitespace-normal"
                     onClick={() => openEditor("articles", index, "edit")}
+                    onImageDrop={(file) => handleCardImageDrop("articles", index, file)}
+                    imageDropBusy={uploadingImage === `articles-${index}`}
                   >
                     <CopyBox value={`${article.title}\n\n${article.body}`}>
                       <p className="m-0 line-clamp-7">{article.excerpt || article.body || "No article content yet."}</p>
@@ -1086,6 +1124,8 @@ function DashboardWorkspace({ user }: { user: User }) {
                     eyebrow={kind}
                     title={subject}
                     onClick={() => openEditor("outreach", index, "edit")}
+                    onImageDrop={(file) => handleCardImageDrop("outreach", index, file)}
+                    imageDropBusy={uploadingImage === `outreach-${index}`}
                   >
                     <CopyBox value={`Subject: ${subject}\n\n${body}`}>
                       <p className="m-0 line-clamp-7">{body}</p>

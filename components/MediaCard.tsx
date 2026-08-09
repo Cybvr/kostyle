@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { useState, type DragEvent, type ReactNode } from "react";
+import { ImagePlus } from "lucide-react";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +9,8 @@ export function MediaCard({
   title,
   titleClassName,
   onClick,
+  onImageDrop,
+  imageDropBusy = false,
   children,
 }: {
   image: ReactNode;
@@ -15,8 +18,21 @@ export function MediaCard({
   title: string;
   titleClassName?: string;
   onClick?: () => void;
+  onImageDrop?: (file: File) => void | Promise<void>;
+  imageDropBusy?: boolean;
   children: ReactNode;
 }) {
+  const [dragOver, setDragOver] = useState(false);
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    if (!onImageDrop) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setDragOver(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) void onImageDrop(file);
+  };
+
   return (
     <Card
       role={onClick ? "button" : undefined}
@@ -37,8 +53,27 @@ export function MediaCard({
         onClick && "cursor-pointer",
       )}
     >
-      <div className="aspect-square w-full overflow-hidden bg-muted/50 flex items-center justify-center">
+      <div
+        className={cn(
+          "relative flex aspect-square w-full items-center justify-center overflow-hidden bg-muted/50",
+          dragOver && "bg-accent/10 ring-2 ring-inset ring-accent",
+        )}
+        onDragOver={onImageDrop ? (event) => { event.preventDefault(); event.stopPropagation(); setDragOver(true); } : undefined}
+        onDragLeave={onImageDrop ? () => setDragOver(false) : undefined}
+        onDrop={onImageDrop ? handleDrop : undefined}
+      >
         {image}
+        {onImageDrop ? (
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-center text-xs font-medium text-foreground opacity-0 transition-opacity",
+              (dragOver || imageDropBusy) && "opacity-100",
+            )}
+          >
+            <ImagePlus className="size-6 text-accent" aria-hidden />
+            <span>{imageDropBusy ? "Uploading image…" : "Drop image to replace"}</span>
+          </div>
+        ) : null}
       </div>
       {eyebrow ? (
         <span className="block px-4 pt-4 font-heading text-[11px] font-semibold uppercase tracking-[.12em] text-accent">
