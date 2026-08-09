@@ -49,7 +49,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-import { MdFolder } from "react-icons/md";
+import { MdArticle, MdFolder } from "react-icons/md";
 import {
   NAV,
   STATS,
@@ -885,10 +885,7 @@ function DashboardWorkspace({ user }: { user: User }) {
                 {content.articles.map((title, index) => (
                   <MediaCard
                     key={title}
-                    image={
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src="/cover-bg.png" alt="" className="size-full object-cover" />
-                    }
+                    image={<MdArticle aria-hidden="true" className="size-8 text-muted-foreground" />}
                     title={title}
                     onClick={() => openEditor("articles", index, "edit")}
                   >
