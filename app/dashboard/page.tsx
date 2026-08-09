@@ -243,11 +243,9 @@ function FirebaseSetupNotice() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">
       <div className="max-w-md rounded-xl border border-border bg-card p-8 shadow-sm">
-        <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[.12em] text-accent">Firebase setup</p>
-        <h1 className="font-heading text-2xl font-medium tracking-tight">Connect VisualHQPortfolio</h1>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Add the Firebase values from the VisualHQPortfolio project to <code>.env.local</code> to enable Google sign-in and the kostyle Firestore workspace.
-        </p>
+        <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[.12em] text-accent">KOStyle</p>
+        <h1 className="font-heading text-2xl font-medium tracking-tight">Dashboard unavailable</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Please return to the sign-in page and try again shortly.</p>
       </div>
     </main>
   );

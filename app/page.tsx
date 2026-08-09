@@ -5,7 +5,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebas
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
-import { auth, firebaseConfigured, firebaseProjectId } from "@/lib/firebase";
+import { auth, firebaseConfigured } from "@/lib/firebase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,12 +36,10 @@ export default function LoginPage() {
   if (!firebaseConfigured) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">
-        <div className="max-w-md rounded-xl border border-border bg-card p-8 shadow-sm">
-          <p className="mb-2 font-heading text-[10px] font-semibold uppercase tracking-[.12em] text-accent">VisualHQPortfolio</p>
-          <h1 className="font-heading text-2xl font-medium tracking-tight">Connect Firebase to sign in</h1>
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            Copy <code>.env.example</code> to <code>.env.local</code>, fill in the Firebase web app values for <strong>{firebaseProjectId}</strong>, and restart the dev server.
-          </p>
+        <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
+          <p className="mb-3 font-heading text-[10px] font-semibold uppercase tracking-[.12em] text-accent">KOStyle</p>
+          <h1 className="font-heading text-3xl font-medium tracking-tight">Welcome back</h1>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Sign-in is temporarily unavailable. Please try again shortly.</p>
         </div>
       </main>
     );
@@ -51,7 +49,7 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">
       <section className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
         <div className="mb-8">
-          <p className="mb-3 font-heading text-[10px] font-semibold uppercase tracking-[.12em] text-accent">VisualHQPortfolio</p>
+          <p className="mb-3 font-heading text-[10px] font-semibold uppercase tracking-[.12em] text-accent">KOStyle</p>
           <h1 className="font-heading text-3xl font-medium tracking-tight">Welcome back</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Sign in to open the KOStyle workspace.</p>
         </div>
