@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, Sparkles, Trash2 } from "lucide-react";
 import { MdArticle, MdFolder } from "react-icons/md";
 import {
   NAV,
@@ -366,6 +366,8 @@ function DashboardWorkspace({ user }: { user: User }) {
   const [editorError, setEditorError] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState<string | null>(null);
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+  const [generatePrompt, setGeneratePrompt] = useState("");
+  const [generating, setGenerating] = useState(false);
   const { content, setContent, error: contentError } = useWorkspaceContent();
   const profile = useUserProfile(user);
   const hydrated = useRef(false);
@@ -417,10 +419,43 @@ function DashboardWorkspace({ user }: { user: User }) {
     setEditor({ section, index, mode });
     setDraft(mode === "add" ? getBlankDraft(content, section) : getDraft(content, section, index));
     setEditorError(null);
+    setGeneratePrompt("");
   };
 
   const updateDraft = (field: string, value: string) => {
     setDraft((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const generateContent = async () => {
+    if (!editor || generating) return;
+    setGenerating(true);
+    setEditorError(null);
+
+    try {
+      const idToken = await user.getIdToken();
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          section: editor.section,
+          instruction: generatePrompt.trim(),
+          draft,
+        }),
+      });
+      const payload = await response.json() as { fields?: Record<string, string>; error?: string };
+      if (!response.ok) throw new Error(payload.error || "Unable to generate content.");
+      if (!payload.fields) throw new Error("The generator returned no content.");
+
+      setDraft((previous) => ({ ...previous, ...payload.fields }));
+      setGeneratePrompt("");
+    } catch (generateError: unknown) {
+      setEditorError(generateError instanceof Error ? generateError.message : "Unable to generate content.");
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const handleCardImageDrop = async (section: ImageSection, index: number, file: File) => {
@@ -1233,6 +1268,34 @@ function DashboardWorkspace({ user }: { user: User }) {
             {editorError ? (
               <div className="mb-5 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
                 {editorError}
+              </div>
+            ) : null}
+            {editor ? (
+              <div className="mb-6 rounded-lg border border-accent/30 bg-accent/5 p-4">
+                <div className="flex items-center gap-2 font-heading text-sm font-semibold text-foreground">
+                  <Sparkles className="size-4 text-accent" aria-hidden="true" />
+                  Generate with AI
+                </div>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  Give it a direction, or leave this blank for a strong first draft. You can edit everything before saving.
+                </p>
+                <Textarea
+                  className="mt-3 min-h-20 bg-background"
+                  value={generatePrompt}
+                  onChange={(event) => setGeneratePrompt(event.target.value)}
+                  placeholder="e.g. Write a buying guide for choosing gloves for heavy-bag training"
+                  aria-label="Instructions for AI content generation"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="mt-3 w-full"
+                  onClick={generateContent}
+                  disabled={generating}
+                >
+                  {generating ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Sparkles className="size-4" aria-hidden="true" />}
+                  {generating ? "Generating…" : "Generate content"}
+                </Button>
               </div>
             ) : null}
             {renderEditorForm()}
