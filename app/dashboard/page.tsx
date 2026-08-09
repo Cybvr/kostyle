@@ -662,13 +662,13 @@ function DashboardWorkspace({ user }: { user: User }) {
       case "articles":
         return (
           <div className="space-y-5">
-            {itemPicker}
             <EditorField label="Article image">
               <ImageDropField
                 value={draft.image || undefined}
                 onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
               />
             </EditorField>
+            {itemPicker}
             <EditorField label="Article title" htmlFor="editor-title">
               <Input id="editor-title" value={draft.title ?? ""} onChange={(event) => updateDraft("title", event.target.value)} />
             </EditorField>
