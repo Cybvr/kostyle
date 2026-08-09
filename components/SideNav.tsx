@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useState, type MouseEvent } from "react";
+import type { User } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import Image from "next/image";
-import { ChevronsUpDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { ChevronsUpDown, PanelLeftClose, PanelLeftOpen, Settings2 } from "lucide-react";
 import type { NavItem } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { auth } from "@/lib/firebase";
+import type { UserProfile } from "@/lib/user-profile";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -14,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface SideNavProps {
   items: ReadonlyArray<NavItem>;
@@ -24,11 +28,25 @@ interface SideNavProps {
   /** Desktop collapsed (icon-only) state */
   collapsed: boolean;
   onToggleCollapse: () => void;
+  user?: User | null;
+  profile?: UserProfile | null;
 }
 
-export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: SideNavProps) {
+function getInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "U";
+}
+
+export function SideNav({ items, open, onClose, collapsed, onToggleCollapse, user, profile }: SideNavProps) {
   const [active, setActive] = useState<string>(items[0]?.id ?? "");
   const [darkMode, setDarkMode] = useState(false);
+  const displayName = profile?.displayName || user?.displayName || "Account";
+  const email = profile?.email || user?.email || "";
+  const photoURL = profile?.photoURL || user?.photoURL || "";
 
   useEffect(() => {
     const enabled = window.localStorage.getItem("kostyle-theme") === "dark";
@@ -158,6 +176,17 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
               </a>
             );
           })}
+          <a
+            href="/settings"
+            title={collapsed ? "Settings" : undefined}
+            className={cn(
+              "group relative flex items-center gap-3 px-4 py-2.5 text-left text-muted-foreground transition-colors hover:text-foreground",
+              collapsed && "lg:justify-center lg:px-0",
+            )}
+          >
+            <Settings2 className="size-[18px] shrink-0" aria-hidden />
+            <span className={cn("font-heading text-[13px] tracking-[.02em]", collapsed && "lg:hidden")}>Settings</span>
+          </a>
         </div>
 
         {/* Profile */}
@@ -173,13 +202,14 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
                 )}
               >
                 <Avatar className="size-9 rounded-md">
+                  {photoURL ? <AvatarImage src={photoURL} alt={displayName} /> : null}
                   <AvatarFallback className="rounded-md bg-accent font-heading text-sm font-semibold text-accent-foreground">
-                    AH
+                    {getInitials(displayName)}
                   </AvatarFallback>
                 </Avatar>
                 <span className={cn("min-w-0 flex-1", collapsed && "lg:hidden")}>
-                  <span className="block truncate text-sm font-semibold text-foreground">Ali Hamze</span>
-                  <span className="block truncate text-xs text-muted-foreground">ali@kostyle.ae</span>
+                  <span className="block truncate text-sm font-semibold text-foreground">{displayName}</span>
+                  <span className="block truncate text-xs text-muted-foreground">{email}</span>
                 </span>
                 <ChevronsUpDown
                   className={cn("size-4 shrink-0 text-muted-foreground", collapsed && "lg:hidden")}
@@ -189,12 +219,19 @@ export function SideNav({ items, open, onClose, collapsed, onToggleCollapse }: S
             </DropdownMenuTrigger>
             <DropdownMenuContent side="top" align="start" className="w-56">
               <DropdownMenuItem>My Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => { window.location.href = "/settings"; }}>Settings</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem checked={darkMode} onCheckedChange={setTheme}>
                 Dark mode
               </DropdownMenuCheckboxItem>
-              <DropdownMenuItem>Sign out</DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={async () => {
+                  if (auth) await signOut(auth);
+                  window.location.href = "/";
+                }}
+              >
+                Sign out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

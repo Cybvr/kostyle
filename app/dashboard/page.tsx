@@ -9,6 +9,16 @@ import { MediaCard } from "@/components/MediaCard";
 import { AddCard } from "@/components/AddCard";
 import { ImageDropField } from "@/components/ImageDropField";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CopyBox, CopyButton } from "@/components/ui/copy-box";
@@ -37,7 +47,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { MdFolder } from "react-icons/md";
 import {
   NAV,
@@ -46,6 +56,7 @@ import {
 } from "@/lib/data";
 import { auth, firebaseConfigured } from "@/lib/firebase";
 import { useWorkspaceContent } from "@/lib/use-workspace-content";
+import { ensureUserProfile, useUserProfile } from "@/lib/user-profile";
 
 const STORAGE_KEY = "kostyle-roadmap-done";
 
@@ -265,6 +276,7 @@ export default function DashboardPage() {
     return onAuthStateChanged(auth, (nextUser) => {
       setUser(nextUser);
       setAuthReady(true);
+      if (nextUser) void ensureUserProfile(nextUser);
       if (!nextUser) router.replace("/");
     });
   }, [router]);
@@ -274,16 +286,18 @@ export default function DashboardPage() {
     return <main className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">Loading dashboard…</main>;
   }
 
-  return <DashboardWorkspace />;
+  return <DashboardWorkspace user={user} />;
 }
 
-function DashboardWorkspace() {
+function DashboardWorkspace({ user }: { user: User }) {
   const [done, setDone] = useState<Set<number>>(new Set());
   const [navOpen, setNavOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [editor, setEditor] = useState<EditorState>(null);
   const [draft, setDraft] = useState<EditorDraft>({});
-  const { content, setContent } = useWorkspaceContent();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { content, setContent, error: contentError } = useWorkspaceContent();
+  const profile = useUserProfile(user);
   const hydrated = useRef(false);
 
   useEffect(() => {
@@ -471,6 +485,37 @@ function DashboardWorkspace() {
           };
       }
     });
+    setEditor(null);
+  };
+
+  const deleteEditorItem = () => {
+    if (!editor || editor.mode !== "edit" || editor.section === "about") return;
+
+    setContent((prev) => {
+      switch (editor.section) {
+        case "roadmap":
+          return { ...prev, roadmap: prev.roadmap.filter((_, index) => index !== editor.index) };
+        case "campaigns":
+          return { ...prev, campaigns: prev.campaigns.filter((_, index) => index !== editor.index) };
+        case "whatsapp":
+          return { ...prev, quickReplies: prev.quickReplies.filter((_, index) => index !== editor.index) };
+        case "win-back":
+          return { ...prev, winBack: prev.winBack.filter((_, index) => index !== editor.index) };
+        case "articles":
+          return { ...prev, articles: prev.articles.filter((_, index) => index !== editor.index) };
+        case "seo":
+          return { ...prev, seo: prev.seo.filter((_, index) => index !== editor.index) };
+        case "outreach":
+          return { ...prev, outreach: prev.outreach.filter((_, index) => index !== editor.index) };
+        case "as-seen-in":
+          return { ...prev, asSeenIn: prev.asSeenIn.filter((_, index) => index !== editor.index) };
+        case "results":
+          return { ...prev, results: prev.results.filter((_, index) => index !== editor.index) };
+        case "about":
+          return prev;
+      }
+    });
+    setDeleteDialogOpen(false);
     setEditor(null);
   };
 
@@ -676,10 +721,18 @@ function DashboardWorkspace() {
         onClose={() => setNavOpen(false)}
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed((value) => !value)}
+        user={user}
+        profile={profile}
       />
 
       <div className={cn("transition-[padding] duration-200", collapsed ? "lg:pl-16" : "lg:pl-56")}>
         <Header onMenu={() => setNavOpen(true)} done={doneCount} total={total} />
+
+        {contentError ? (
+          <div className="border-b border-destructive/30 bg-destructive/10 px-4 py-2 text-center text-xs text-destructive sm:px-6 lg:px-8">
+            Changes could not be saved. Please try again.
+          </div>
+        ) : null}
 
         <main id="main-content" className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           {/* ── Overview ── */}
@@ -904,7 +957,17 @@ function DashboardWorkspace() {
             </Panel>
 
             {/* About: founder story + press kit */}
-            <Panel id="about" title="About" className="lg:col-span-2">
+            <Panel
+              id="about"
+              title="About"
+              action={
+                <Button type="button" size="sm" variant="outline" onClick={() => openEditor("about", 0, "edit")}>
+                  <Pencil className="size-3.5" aria-hidden />
+                  Edit
+                </Button>
+              }
+              className="lg:col-span-2"
+            >
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
                 <div>
                   <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
@@ -1032,16 +1095,39 @@ function DashboardWorkspace() {
             </SheetTitle>
           </SheetHeader>
           <div className="flex-1 overflow-y-auto px-6 py-6">{renderEditorForm()}</div>
-          <SheetFooter className="border-t border-border px-6 py-4 sm:flex-row sm:justify-end">
-            <Button type="button" variant="ghost" onClick={() => setEditor(null)}>
-              Cancel
-            </Button>
-            <Button type="button" onClick={saveEditor} disabled={!editor}>
-              Save changes
-            </Button>
+          <SheetFooter className="border-t border-border px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+            {editor?.mode === "edit" && editor.section !== "about" ? (
+              <Button type="button" variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
+                <Trash2 className="size-4" aria-hidden />
+                Delete
+              </Button>
+            ) : <span />}
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="ghost" onClick={() => setEditor(null)}>
+                Cancel
+              </Button>
+              <Button type="button" onClick={saveEditor} disabled={!editor}>
+                Save changes
+              </Button>
+            </div>
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this {editor ? editorTitles[editor.section] : "item"}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove the item from your dashboard. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={deleteEditorItem}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

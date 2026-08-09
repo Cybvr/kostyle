@@ -5,6 +5,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 export const metadata: Metadata = {
   title: "KOStyle — Welcome",
   description: "Welcome to KOStyle.",
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/kostyle-icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/kostyle-icon-192.png",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

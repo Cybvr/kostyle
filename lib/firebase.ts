@@ -24,7 +24,10 @@ const firebaseApp = firebaseConfigured
     : initializeApp(firebaseConfig)
   : null;
 
-const databaseId = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_ID ?? "(default)";
+// The workspace is deployed to the named `kostyle` Firestore database
+// (see firebase.json and scripts/migrate-firestore.ts). Keep the client on
+// that database even when local env files omit the optional variable.
+const databaseId = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_ID ?? "kostyle";
 
 export const auth = firebaseApp ? getAuth(firebaseApp) : null;
 export const db = firebaseApp

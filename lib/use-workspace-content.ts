@@ -8,6 +8,18 @@ import { INITIAL_CONTENT, type EditableContent } from "@/lib/data";
 const LOCAL_CONTENT_KEY = "kostyle-editable-content";
 const WORKSPACE_REF = db ? doc(db, "workspaces", "kostyle") : null;
 
+function removeUndefined(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(removeUndefined);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, entry]) => entry !== undefined)
+        .map(([key, entry]) => [key, removeUndefined(entry)]),
+    );
+  }
+  return value;
+}
+
 function mergeContent(value: Record<string, unknown>): EditableContent {
   return {
     ...INITIAL_CONTENT,
@@ -27,6 +39,7 @@ function mergeContent(value: Record<string, unknown>): EditableContent {
 export function useWorkspaceContent() {
   const [content, setContent] = useState<EditableContent>(INITIAL_CONTENT);
   const [loading, setLoading] = useState(firebaseConfigured);
+  const [error, setError] = useState<string | null>(null);
   const hydrated = useRef(false);
 
   useEffect(() => {
@@ -45,16 +58,24 @@ export function useWorkspaceContent() {
     const unsubscribe = onSnapshot(
       WORKSPACE_REF,
       async (snapshot) => {
-        if (snapshot.exists()) {
-          setContent(mergeContent(snapshot.data()));
-        } else {
-          await setDoc(WORKSPACE_REF, INITIAL_CONTENT);
-          setContent(INITIAL_CONTENT);
+        try {
+          if (snapshot.exists()) {
+            setContent(mergeContent(snapshot.data()));
+          } else {
+            await setDoc(WORKSPACE_REF, removeUndefined(INITIAL_CONTENT) as EditableContent);
+            setContent(INITIAL_CONTENT);
+          }
+          setError(null);
+          hydrated.current = true;
+          setLoading(false);
+        } catch (initialWriteError: unknown) {
+          setError(initialWriteError instanceof Error ? initialWriteError.message : "Unable to create the workspace.");
+          hydrated.current = true;
+          setLoading(false);
         }
-        hydrated.current = true;
-        setLoading(false);
       },
-      () => {
+      (snapshotError) => {
+        setError(snapshotError.message);
         setLoading(false);
         hydrated.current = true;
       },
@@ -73,9 +94,11 @@ export function useWorkspaceContent() {
     }
 
     if (firebaseConfigured && WORKSPACE_REF) {
-      void setDoc(WORKSPACE_REF, content, { merge: true });
+      void setDoc(WORKSPACE_REF, removeUndefined(content) as EditableContent, { merge: true }).catch((saveError: unknown) => {
+        setError(saveError instanceof Error ? saveError.message : "Unable to save changes.");
+      });
     }
   }, [content]);
 
-  return { content, setContent, loading };
+  return { content, setContent, loading, error };
 }

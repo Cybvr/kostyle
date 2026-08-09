@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { auth, firebaseConfigured } from "@/lib/firebase";
+import { ensureUserProfile } from "@/lib/user-profile";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,7 +26,8 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      await ensureUserProfile(result.user);
       router.replace("/dashboard");
     } catch (signInError) {
       setError(signInError instanceof Error ? signInError.message : "Google sign-in failed.");
