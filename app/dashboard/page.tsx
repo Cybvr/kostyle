@@ -466,7 +466,17 @@ function DashboardWorkspace({ user }: { user: User }) {
           },
         }),
       });
-      const payload = await response.json() as { fields?: Record<string, string>; error?: string };
+      const responseText = await response.text();
+      let payload: { fields?: Record<string, string>; error?: string } = {};
+      try {
+        payload = responseText ? JSON.parse(responseText) as { fields?: Record<string, string>; error?: string } : {};
+      } catch {
+        throw new Error(
+          response.ok
+            ? "The generator returned an invalid response. Please try again."
+            : `The generator endpoint returned ${response.status}. Restart the dev server and try again.`,
+        );
+      }
       if (!response.ok) throw new Error(payload.error || "Unable to generate content.");
       if (!payload.fields) throw new Error("The generator returned no content.");
 
