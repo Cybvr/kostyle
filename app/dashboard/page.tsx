@@ -54,7 +54,7 @@ import {
   STATS,
   type EditableContent,
 } from "@/lib/data";
-import { auth, firebaseConfigured } from "@/lib/firebase";
+import { auth, enableAuthPersistence, firebaseConfigured } from "@/lib/firebase";
 import { uploadImageDataUrl } from "@/lib/storage";
 import { useWorkspaceContent } from "@/lib/use-workspace-content";
 import { ensureUserProfile, useUserProfile } from "@/lib/user-profile";
@@ -269,17 +269,29 @@ export default function DashboardPage() {
   const [authReady, setAuthReady] = useState(!firebaseConfigured);
 
   useEffect(() => {
-    if (!auth) {
+    const currentAuth = auth;
+    if (!currentAuth) {
       setAuthReady(true);
       return;
     }
 
-    return onAuthStateChanged(auth, (nextUser) => {
-      setUser(nextUser);
-      setAuthReady(true);
-      if (nextUser) void ensureUserProfile(nextUser);
-      if (!nextUser) router.replace("/");
+    let unsubscribe = () => {};
+    let cancelled = false;
+
+    void enableAuthPersistence().catch(() => undefined).then(() => {
+      if (cancelled) return;
+      unsubscribe = onAuthStateChanged(currentAuth, (nextUser) => {
+        setUser(nextUser);
+        setAuthReady(true);
+        if (nextUser) void ensureUserProfile(nextUser);
+        if (!nextUser) router.replace("/");
+      });
     });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
   }, [router]);
 
   if (!firebaseConfigured) return <FirebaseSetupNotice />;

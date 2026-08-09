@@ -5,7 +5,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebas
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
-import { auth, firebaseConfigured } from "@/lib/firebase";
+import { auth, enableAuthPersistence, firebaseConfigured } from "@/lib/firebase";
 import { ensureUserProfile } from "@/lib/user-profile";
 
 export default function LoginPage() {
@@ -14,19 +14,33 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!auth) return;
-    return onAuthStateChanged(auth, (user) => {
-      if (user) router.replace("/dashboard");
+    const currentAuth = auth;
+    if (!currentAuth) return;
+    let unsubscribe = () => {};
+    let cancelled = false;
+
+    void enableAuthPersistence().catch(() => undefined).then(() => {
+      if (cancelled) return;
+      unsubscribe = onAuthStateChanged(currentAuth, (user) => {
+        if (user) router.replace("/dashboard");
+      });
     });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
   }, [router]);
 
   const signInWithGoogle = async () => {
-    if (!auth) return;
+    const currentAuth = auth;
+    if (!currentAuth) return;
     setBusy(true);
     setError(null);
 
     try {
-      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      await enableAuthPersistence();
+      const result = await signInWithPopup(currentAuth, new GoogleAuthProvider());
       await ensureUserProfile(result.user);
       router.replace("/dashboard");
     } catch (signInError) {
