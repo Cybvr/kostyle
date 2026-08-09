@@ -33,9 +33,9 @@ export function ImageDropField({
 
   if (value) {
     return (
-      <div className={cn("relative flex min-h-64 w-full max-w-sm items-center justify-center overflow-hidden rounded-md border border-border bg-muted/20 p-2", className)}>
+      <div className={cn("relative aspect-square w-full max-w-40 overflow-hidden rounded-md border border-border bg-muted/20", className)}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={value} alt="" className="max-h-[min(65vh,720px)] w-full object-contain" />
+        <img src={value} alt="" className="size-full object-cover" />
         <Button
           type="button"
           variant="secondary"

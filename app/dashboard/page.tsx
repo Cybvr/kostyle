@@ -46,6 +46,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { MdFolder } from "react-icons/md";
@@ -329,7 +330,11 @@ export default function DashboardPage() {
 
   if (!firebaseConfigured) return <FirebaseSetupNotice />;
   if (!authReady || !user) {
-    return <main className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">Loading dashboard…</main>;
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-background" aria-busy="true" aria-label="Loading dashboard">
+        <Skeleton className="h-5 w-40" />
+      </main>
+    );
   }
 
   return <DashboardWorkspace user={user} />;
@@ -876,26 +881,22 @@ function DashboardWorkspace({ user }: { user: User }) {
 
             {/* Articles */}
             <Panel id="articles" title="Buying-guide articles" onAdd={() => openEditor("articles")}>
-              <Table className="text-sm">
-                <TableHeader>
-                  <TableRow className="border-b-2 border-border hover:bg-transparent">
-                    <TableHead className={thCls}>Article</TableHead>
-                    <TableHead className="w-16">
-                      <span className="sr-only">Actions</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {content.articles.map((title, index) => (
-                    <EditableRow key={title} className="border-border" onEdit={() => openEditor("articles", index, "edit")}>
-                      <TableCell className="whitespace-normal text-foreground">{title}</TableCell>
-                      <TableCell>
-                        <RowActions copyValue={title} />
-                      </TableCell>
-                    </EditableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {content.articles.map((title, index) => (
+                  <MediaCard
+                    key={title}
+                    image={<MdFolder aria-hidden="true" className="size-8 text-muted-foreground" />}
+                    eyebrow="Article"
+                    title={title}
+                    onClick={() => openEditor("articles", index, "edit")}
+                  >
+                    <div className="flex justify-end">
+                      <CopyButton value={title} />
+                    </div>
+                  </MediaCard>
+                ))}
+                <AddCard label="New article" onClick={() => openEditor("articles")} />
+              </div>
             </Panel>
 
             {/* SEO */}
@@ -1072,20 +1073,26 @@ function DashboardWorkspace({ user }: { user: User }) {
             ) : null}
             {renderEditorForm()}
           </div>
-          <SheetFooter className="border-t border-border px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <SheetFooter className="flex-row items-center justify-between border-t border-border px-6 py-4">
             {editor?.mode === "edit" && editor.section !== "about" ? (
-              <Button type="button" variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => setDeleteDialogOpen(true)}
+                aria-label={`Delete ${editor ? editorTitles[editor.section] : "item"}`}
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+              >
                 <Trash2 className="size-4" aria-hidden />
-                Delete
               </Button>
             ) : <span />}
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-2">
               <Button type="button" variant="ghost" onClick={() => setEditor(null)}>
                 Cancel
               </Button>
               <Button type="button" onClick={saveEditor} disabled={!editor}>
-              {saving ? "Uploading…" : "Save changes"}
-            </Button>
+                {saving ? "Uploading…" : "Save changes"}
+              </Button>
             </div>
           </SheetFooter>
         </SheetContent>
