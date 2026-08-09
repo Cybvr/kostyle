@@ -881,22 +881,18 @@ function DashboardWorkspace({ user }: { user: User }) {
 
             {/* Articles */}
             <Panel id="articles" title="Buying-guide articles" onAdd={() => openEditor("articles")}>
-              <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {content.articles.map((title, index) => (
                   <MediaCard
                     key={title}
                     image={
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src="/cover-bg.png" alt="" className="size-full object-cover object-[72%_center]" />
+                      <img src="/cover-bg.png" alt="" className="size-full object-cover" />
                     }
-                    eyebrow="Article"
                     title={title}
-                    titleClassName="line-clamp-2 whitespace-normal"
                     onClick={() => openEditor("articles", index, "edit")}
                   >
-                    <div className="flex justify-end">
-                      <CopyButton value={title} />
-                    </div>
+                    <CopyBox value={title} textClassName="line-clamp-7" />
                   </MediaCard>
                 ))}
                 <AddCard label="New article" onClick={() => openEditor("articles")} />
