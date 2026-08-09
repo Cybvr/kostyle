@@ -880,7 +880,7 @@ function DashboardWorkspace({ user }: { user: User }) {
             </Panel>
 
             {/* Articles */}
-            <Panel id="articles" title="Buying-guide articles" onAdd={() => openEditor("articles")}>
+            <Panel id="articles" title="Buying-guide articles" onAdd={() => openEditor("articles")} className="lg:col-span-2">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {content.articles.map((title, index) => (
                   <MediaCard
