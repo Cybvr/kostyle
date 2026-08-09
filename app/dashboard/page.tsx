@@ -95,8 +95,17 @@ function getDraft(content: EditableContent, section: EditorSection, index: numbe
       const item = content.winBack[index];
       return { name: item.name, copy: item.copy };
     }
-    case "articles":
-      return { title: content.articles[index] };
+    case "articles": {
+      const item = content.articles[index];
+      return {
+        title: item.title,
+        excerpt: item.excerpt,
+        body: item.body,
+        tags: item.tags.join(", "),
+        status: item.status,
+        publishDate: item.publishDate,
+      };
+    }
     case "seo": {
       const item = content.seo[index];
       return { page: item.page, title: item.title, desc: item.desc };
@@ -129,7 +138,7 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
     case "win-back":
       return { name: "New post", copy: "" };
     case "articles":
-      return { title: "" };
+      return { title: "", excerpt: "", body: "", tags: "boxing gloves, training", status: "draft", publishDate: "" };
     case "seo":
       return { page: "", title: "", desc: "" };
     case "about":
@@ -145,6 +154,10 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
 
 function updateAt<T>(items: T[], index: number, update: (item: T) => T) {
   return items.map((item, itemIndex) => (itemIndex === index ? update(item) : item));
+}
+
+function parseTags(value: string | undefined) {
+  return (value ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
 }
 
 
@@ -382,6 +395,19 @@ function DashboardWorkspace({ user }: { user: User }) {
 
   const total = content.roadmap.length;
   const doneCount = done.size;
+  const publishedArticles = content.articles.filter((article) => article.status === "published").length;
+  const contentStats = [
+    { label: "Roadmap tasks", value: total, detail: `${doneCount} complete` },
+    { label: "Campaign assets", value: content.campaigns.length, detail: "Drop kit" },
+    { label: "WhatsApp responses", value: content.quickReplies.length, detail: "Saved templates" },
+    { label: "Win-back posts", value: content.winBack.length, detail: "Referral ready" },
+    { label: "Articles", value: content.articles.length, detail: `${publishedArticles} published` },
+    { label: "SEO entries", value: content.seo.length, detail: "Pages covered" },
+    { label: "Outreach messages", value: content.outreach.length, detail: "Press + podcast" },
+    { label: "Coverage assets", value: content.asSeenIn.length, detail: "As seen in" },
+    { label: "Results rows", value: content.results.length, detail: "Tracked outputs" },
+    { label: "About assets", value: 2, detail: "Story + press kit" },
+  ];
 
   const openEditor = (section: EditorSection, index = 0, mode: "add" | "edit" = "add") => {
     setEditor({ section, index, mode });
@@ -422,7 +448,20 @@ function DashboardWorkspace({ user }: { user: User }) {
             case "win-back":
               return { ...prev, winBack: [...prev.winBack, { name: draft.name ?? "New post", copy: draft.copy ?? "" }] };
             case "articles":
-              return { ...prev, articles: [...prev.articles, draft.title ?? "New article"] };
+              return {
+                ...prev,
+                articles: [
+                  ...prev.articles,
+                  {
+                    title: draft.title ?? "New article",
+                    excerpt: draft.excerpt ?? "",
+                    body: draft.body ?? "",
+                    tags: parseTags(draft.tags),
+                    status: draft.status === "published" ? "published" : "draft",
+                    publishDate: draft.publishDate ?? "",
+                  },
+                ],
+              };
             case "seo":
               return { ...prev, seo: [...prev.seo, { page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "", copy: true }] };
             case "outreach":
@@ -447,7 +486,18 @@ function DashboardWorkspace({ user }: { user: User }) {
             case "win-back":
               return { ...prev, winBack: updateAt(prev.winBack, editor.index, (item) => ({ ...item, name: draft.name ?? "", copy: draft.copy ?? "" })) };
             case "articles":
-              return { ...prev, articles: updateAt(prev.articles, editor.index, () => draft.title ?? "") };
+              return {
+                ...prev,
+                articles: updateAt(prev.articles, editor.index, (item) => ({
+                  ...item,
+                  title: draft.title ?? "",
+                  excerpt: draft.excerpt ?? "",
+                  body: draft.body ?? "",
+                  tags: parseTags(draft.tags),
+                  status: draft.status === "published" ? "published" : "draft",
+                  publishDate: draft.publishDate ?? "",
+                })),
+              };
             case "seo":
               return { ...prev, seo: updateAt(prev.seo, editor.index, (item) => ({ ...item, page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "" })) };
             case "about":
@@ -506,7 +556,7 @@ function DashboardWorkspace({ user }: { user: User }) {
         campaigns: content.campaigns.map((item) => item.label),
         whatsapp: content.quickReplies.map((item) => item.title),
         "win-back": content.winBack.map((item) => item.name),
-        articles: content.articles,
+        articles: content.articles.map((item) => item.title),
         seo: content.seo.map((item) => item.page),
         about: ["Founder story + press kit"],
         outreach: content.outreach.map((item) => item.kind),
@@ -613,6 +663,32 @@ function DashboardWorkspace({ user }: { user: User }) {
             <EditorField label="Article title" htmlFor="editor-title">
               <Input id="editor-title" value={draft.title ?? ""} onChange={(event) => updateDraft("title", event.target.value)} />
             </EditorField>
+            <EditorField label="Excerpt" htmlFor="editor-excerpt">
+              <Textarea id="editor-excerpt" className="min-h-24" value={draft.excerpt ?? ""} onChange={(event) => updateDraft("excerpt", event.target.value)} />
+            </EditorField>
+            <EditorField label="Article content" htmlFor="editor-article-body">
+              <Textarea id="editor-article-body" className="min-h-72" value={draft.body ?? ""} onChange={(event) => updateDraft("body", event.target.value)} />
+            </EditorField>
+            <EditorField label="Tags" htmlFor="editor-tags">
+              <Input id="editor-tags" placeholder="boxing gloves, training, care" value={draft.tags ?? ""} onChange={(event) => updateDraft("tags", event.target.value)} />
+              <p className="text-xs text-muted-foreground">Separate tags with commas.</p>
+            </EditorField>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <EditorField label="Publish status">
+                <Select value={draft.status ?? "draft"} onValueChange={(value) => updateDraft("status", value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Choose status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="published">Published</SelectItem>
+                  </SelectContent>
+                </Select>
+              </EditorField>
+              <EditorField label="Publish date" htmlFor="editor-publish-date">
+                <Input id="editor-publish-date" type="date" value={draft.publishDate ?? ""} onChange={(event) => updateDraft("publishDate", event.target.value)} />
+              </EditorField>
+            </div>
           </div>
         );
       case "seo":
@@ -725,18 +801,16 @@ function DashboardWorkspace({ user }: { user: User }) {
               <p className="mt-1 text-sm text-muted-foreground">KOStyle · Aug – Dec 2026</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-              {STATS.map(({ label, start, end }) => (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              {contentStats.map(({ label, value, detail }) => (
                 <Card key={label} className="gap-0 px-5 py-4">
                   <div className="font-heading text-[11px] uppercase tracking-[.12em] text-muted-foreground">
                     {label}
                   </div>
                   <div className="mt-2 font-heading text-3xl font-semibold tracking-tight text-foreground">
-                    {end}
+                    {value}
                   </div>
-                  <div className="mt-1 text-xs text-muted-foreground">
-                    from <span className="text-accent">{start}</span>
-                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">{detail}</div>
                 </Card>
               ))}
             </div>
@@ -882,14 +956,27 @@ function DashboardWorkspace({ user }: { user: User }) {
             {/* Articles */}
             <Panel id="articles" title="Buying-guide articles" onAdd={() => openEditor("articles")} className="lg:col-span-2">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {content.articles.map((title, index) => (
+                {content.articles.map((article, index) => (
                   <MediaCard
-                    key={title}
+                    key={article.title}
                     image={<MdArticle aria-hidden="true" className="size-8 text-muted-foreground" />}
-                    title={title}
+                    eyebrow={article.status === "published" ? "Published" : "Draft"}
+                    title={article.title}
+                    titleClassName="line-clamp-2 whitespace-normal"
                     onClick={() => openEditor("articles", index, "edit")}
                   >
-                    <CopyBox value={title} textClassName="line-clamp-7" />
+                    <CopyBox value={`${article.title}\n\n${article.body}`}>
+                      <p className="m-0 line-clamp-7">{article.excerpt || article.body || "No article content yet."}</p>
+                    </CopyBox>
+                    {article.tags.length > 0 ? (
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {article.tags.slice(0, 3).map((tag) => (
+                          <span key={tag} className="rounded-full bg-muted px-2 py-1 text-[10px] text-muted-foreground">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                   </MediaCard>
                 ))}
                 <AddCard label="New article" onClick={() => openEditor("articles")} />
@@ -1047,6 +1134,30 @@ function DashboardWorkspace({ user }: { user: User }) {
               </Table>
             </Panel>
           </div>
+
+          <section className="mt-8" aria-labelledby="analytics-heading">
+            <div className="mb-5">
+              <h2 id="analytics-heading" className="font-heading text-xl font-medium tracking-tight text-foreground sm:text-2xl">
+                Analytics snapshot
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">Targets and outcomes from the current plan.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {STATS.map(({ label, start, end }) => (
+                <Card key={label} className="gap-0 px-5 py-4">
+                  <div className="font-heading text-[11px] uppercase tracking-[.12em] text-muted-foreground">
+                    {label}
+                  </div>
+                  <div className="mt-2 font-heading text-3xl font-semibold tracking-tight text-foreground">
+                    {end}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    from <span className="text-accent">{start}</span>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
         </main>
       </div>
 

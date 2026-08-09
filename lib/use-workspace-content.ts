@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db, firebaseConfigured } from "@/lib/firebase";
-import { INITIAL_CONTENT, type EditableContent, type QuickReply } from "@/lib/data";
+import { INITIAL_CONTENT, type Article, type EditableContent, type QuickReply } from "@/lib/data";
 
 const LOCAL_CONTENT_KEY = "kostyle-editable-content";
 const WORKSPACE_REF = db ? doc(db, "workspaces", "kostyle") : null;
@@ -42,6 +42,49 @@ function normalizeQuickReplies(value: unknown): QuickReply[] | null {
   });
 }
 
+function normalizeArticles(value: unknown): Article[] | null {
+  if (!Array.isArray(value)) return null;
+
+  return value.map((item, index) => {
+    if (typeof item === "string") {
+      const legacySeedTitles = [
+        "How to choose a training hoodie that lasts",
+        "What to look for in boxing shorts",
+        "Training wear that works in Dubai heat",
+      ];
+      const seededArticle = INITIAL_CONTENT.articles[index];
+      if (seededArticle && legacySeedTitles.includes(item)) {
+        return { ...seededArticle, tags: [...seededArticle.tags] };
+      }
+
+      return {
+        title: item,
+        excerpt: "",
+        body: "",
+        tags: ["boxing gloves"],
+        status: "draft",
+        publishDate: "",
+      } satisfies Article;
+    }
+
+    const record = item && typeof item === "object" ? item as Record<string, unknown> : {};
+    const rawTags = Array.isArray(record.tags)
+      ? record.tags.filter((tag): tag is string => typeof tag === "string")
+      : typeof record.tags === "string"
+        ? record.tags.split(",").map((tag) => tag.trim()).filter(Boolean)
+        : [];
+
+    return {
+      title: typeof record.title === "string" && record.title.trim() ? record.title : `Article ${index + 1}`,
+      excerpt: typeof record.excerpt === "string" ? record.excerpt : "",
+      body: typeof record.body === "string" ? record.body : typeof record.copy === "string" ? record.copy : "",
+      tags: rawTags,
+      status: record.status === "published" ? "published" : "draft",
+      publishDate: typeof record.publishDate === "string" ? record.publishDate : "",
+    } satisfies Article;
+  });
+}
+
 function mergeContent(value: Record<string, unknown>): EditableContent {
   const quickReplies = normalizeQuickReplies(value.quickReplies);
 
@@ -52,7 +95,7 @@ function mergeContent(value: Record<string, unknown>): EditableContent {
     campaigns: Array.isArray(value.campaigns) ? value.campaigns : INITIAL_CONTENT.campaigns,
     quickReplies: quickReplies ?? INITIAL_CONTENT.quickReplies,
     winBack: Array.isArray(value.winBack) ? value.winBack : INITIAL_CONTENT.winBack,
-    articles: Array.isArray(value.articles) ? value.articles : INITIAL_CONTENT.articles,
+    articles: normalizeArticles(value.articles) ?? INITIAL_CONTENT.articles,
     seo: Array.isArray(value.seo) ? value.seo : INITIAL_CONTENT.seo,
     outreach: Array.isArray(value.outreach) ? value.outreach : INITIAL_CONTENT.outreach,
     asSeenIn: Array.isArray(value.asSeenIn) ? value.asSeenIn : INITIAL_CONTENT.asSeenIn,

@@ -82,10 +82,41 @@ export const WIN_BACK: ReadonlyArray<NamedCopy> = [
   { name: "Reply to a tag", copy: "Appreciate the tag. Send your friends your referral code and you both get AED 30 off the next order." },
 ];
 
-export const ARTICLES: ReadonlyArray<string> = [
-  "How to choose a training hoodie that lasts",
-  "What to look for in boxing shorts",
-  "Training wear that works in Dubai heat",
+export type ArticleStatus = "draft" | "published";
+export type Article = {
+  title: string;
+  excerpt: string;
+  body: string;
+  tags: string[];
+  status: ArticleStatus;
+  publishDate: string;
+};
+
+export const ARTICLES: ReadonlyArray<Article> = [
+  {
+    title: "How to choose boxing gloves for your training",
+    excerpt: "The right boxing gloves should protect your hands, suit your training, and stay comfortable through hard rounds.",
+    body: "Choosing boxing gloves starts with how you train. Bag work, pad work, technical drills, and sparring all place different demands on the glove. Look for secure wrist support, dense but responsive padding, and a fit that keeps your hand closed without cutting off circulation.\n\nFor regular training, durability matters as much as first-day comfort. A glove should hold its shape after repeated sessions, dry properly between uses, and give you enough room for hand wraps without feeling loose. In Dubai heat, breathable lining and a clear care routine matter even more.\n\nThe best glove is the one that lets you train consistently. Choose the size and weight for your session, wrap your hands properly, and replace gloves when the padding or wrist support no longer feels reliable.",
+    tags: ["boxing gloves", "buying guide", "training"],
+    status: "published",
+    publishDate: "2026-08-01",
+  },
+  {
+    title: "8oz, 10oz, 12oz, or 16oz? Boxing glove sizes explained",
+    excerpt: "Glove weight changes how a session feels. Here is a practical way to choose the right pair for your work.",
+    body: "Boxing glove weight is usually measured in ounces, and the right choice depends on the session rather than the colour or shape of the glove. Lighter gloves can feel faster for pad work and competition-style drills. Heavier gloves add more padding and are commonly used for general training and sparring.\n\nIf you are building one everyday training setup, start with a glove that gives you enough protection for the work you actually do. Check your gym's sparring rules before choosing a sparring weight, and remember that hand wraps change the fit inside the glove.\n\nA glove should feel secure around the wrist and snug across the knuckles without forcing your fingers into an awkward position. When in doubt, try the glove with your wraps on and ask your coach what weight suits your sessions.",
+    tags: ["boxing gloves", "sizes", "training"],
+    status: "draft",
+    publishDate: "",
+  },
+  {
+    title: "How to care for boxing gloves in Dubai heat",
+    excerpt: "Heat and sweat can shorten a glove's life. A few simple habits keep the padding, lining, and wrist closure in better shape.",
+    body: "Boxing gloves hold sweat inside the padding and lining, so leaving them zipped in a kit bag after training is one of the fastest ways to create odour and wear. Open the gloves as soon as you finish, remove your wraps, and let both gloves air out in a cool, dry place.\n\nDo not put boxing gloves on a radiator or use high heat to dry them. Wipe the outside with a soft cloth, use a glove-safe cleaner when needed, and keep the inside as dry as possible. In Dubai's heat, rotating between two pairs can also give each pair more time to dry between sessions.\n\nCare will not make a worn-out glove safe again. Check the knuckle padding, seams, and wrist closure regularly, and replace the pair when protection or fit has noticeably changed.",
+    tags: ["boxing gloves", "care guide", "Dubai"],
+    status: "draft",
+    publishDate: "",
+  },
 ];
 
 export type SeoRow = { page: string; title: string; desc: string; copy: boolean };
@@ -141,7 +172,7 @@ export type EditableContent = {
   campaigns: DropPost[];
   quickReplies: QuickReply[];
   winBack: NamedCopy[];
-  articles: string[];
+  articles: Article[];
   seo: SeoRow[];
   founderStory: string;
   pressKitUrl: string;
@@ -156,7 +187,7 @@ export const INITIAL_CONTENT: EditableContent = {
   campaigns: DROP_KIT.map((item) => ({ ...item })),
   quickReplies: QUICK_REPLIES.map((item) => ({ ...item })),
   winBack: WIN_BACK.map((item) => ({ ...item })),
-  articles: [...ARTICLES],
+  articles: ARTICLES.map((item) => ({ ...item, tags: [...item.tags] })),
   seo: SEO_ROWS.map((item) => ({ ...item })),
   founderStory: FOUNDER_STORY,
   pressKitUrl: PRESS_KIT_URL,
