@@ -6,12 +6,14 @@ export function MediaCard({
   image,
   eyebrow,
   title,
+  titleClassName,
   onClick,
   children,
 }: {
   image: ReactNode;
   eyebrow?: string;
   title: string;
+  titleClassName?: string;
   onClick?: () => void;
   children: ReactNode;
 }) {
@@ -43,7 +45,7 @@ export function MediaCard({
           {eyebrow}
         </span>
       ) : null}
-      <CardTitle className="truncate px-4 pt-1 font-heading text-sm font-semibold tracking-tight text-foreground">
+      <CardTitle className={cn("truncate px-4 pt-1 font-heading text-sm font-semibold tracking-tight text-foreground", titleClassName)}>
         {title}
       </CardTitle>
       {/* Stop propagation so clicking the copy button doesn't also open the edit sheet. */}

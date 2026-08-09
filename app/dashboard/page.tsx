@@ -881,13 +881,17 @@ function DashboardWorkspace({ user }: { user: User }) {
 
             {/* Articles */}
             <Panel id="articles" title="Buying-guide articles" onAdd={() => openEditor("articles")}>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-3">
                 {content.articles.map((title, index) => (
                   <MediaCard
                     key={title}
-                    image={<MdFolder aria-hidden="true" className="size-8 text-muted-foreground" />}
+                    image={
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src="/cover-bg.png" alt="" className="size-full object-cover object-[72%_center]" />
+                    }
                     eyebrow="Article"
                     title={title}
+                    titleClassName="line-clamp-2 whitespace-normal"
                     onClick={() => openEditor("articles", index, "edit")}
                   >
                     <div className="flex justify-end">
