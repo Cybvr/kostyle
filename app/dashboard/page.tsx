@@ -55,6 +55,7 @@ import {
   type EditableContent,
 } from "@/lib/data";
 import { auth, firebaseConfigured } from "@/lib/firebase";
+import { uploadImageDataUrl } from "@/lib/storage";
 import { useWorkspaceContent } from "@/lib/use-workspace-content";
 import { ensureUserProfile, useUserProfile } from "@/lib/user-profile";
 
@@ -296,6 +297,8 @@ function DashboardWorkspace({ user }: { user: User }) {
   const [editor, setEditor] = useState<EditorState>(null);
   const [draft, setDraft] = useState<EditorDraft>({});
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editorError, setEditorError] = useState<string | null>(null);
   const { content, setContent, error: contentError } = useWorkspaceContent();
   const profile = useUserProfile(user);
   const hydrated = useRef(false);
@@ -333,6 +336,7 @@ function DashboardWorkspace({ user }: { user: User }) {
   const openEditor = (section: EditorSection, index = 0, mode: "add" | "edit" = "add") => {
     setEditor({ section, index, mode });
     setDraft(mode === "add" ? getBlankDraft(content, section) : getDraft(content, section, index));
+    setEditorError(null);
   };
 
   const updateDraft = (field: string, value: string) => {
@@ -346,146 +350,73 @@ function DashboardWorkspace({ user }: { user: User }) {
     setDraft(getDraft(content, editor.section, index));
   };
 
-  const saveEditor = () => {
-    if (!editor) return;
+  const saveEditor = async () => {
+    if (!editor || saving) return;
+    setSaving(true);
+    setEditorError(null);
 
-    if (editor.mode === "add") {
-      setContent((prev) => {
-        switch (editor.section) {
-          case "roadmap":
-            return {
-              ...prev,
-              roadmap: [
-                ...prev.roadmap,
-                { n: Math.max(0, ...prev.roadmap.map((item) => item.n)) + 1, task: draft.task ?? "", desc: draft.desc ?? "", unit: draft.unit ?? "" },
-              ],
-            };
-          case "campaigns":
-            return {
-              ...prev,
-              campaigns: [
-                ...prev.campaigns,
-                { label: draft.label ?? "New campaign", copy: draft.copy ?? "", image: draft.image || undefined },
-              ],
-            };
-          case "whatsapp":
-            return {
-              ...prev,
-              quickReplies: [...prev.quickReplies, { cmd: draft.cmd ?? "/new", reply: draft.reply ?? "" }],
-            };
-          case "win-back":
-            return { ...prev, winBack: [...prev.winBack, { name: draft.name ?? "New post", copy: draft.copy ?? "" }] };
-          case "articles":
-            return { ...prev, articles: [...prev.articles, draft.title ?? "New article"] };
-          case "seo":
-            return { ...prev, seo: [...prev.seo, { page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "", copy: true }] };
-          case "outreach":
-            return {
-              ...prev,
-              outreach: [
-                ...prev.outreach,
-                { kind: draft.kind ?? "New message", subject: draft.subject ?? "", body: draft.body ?? "", image: draft.image || undefined },
-              ],
-            };
-          case "as-seen-in":
-            return { ...prev, asSeenIn: [...prev.asSeenIn, { name: draft.name ?? "New asset", copy: draft.copy ?? "" }] };
-          case "results":
-            return { ...prev, results: [...prev.results, { measure: draft.measure ?? "", start: draft.start ?? "", end: draft.end ?? "" }] };
-          case "about":
-            return prev;
-        }
-      });
-      setEditor(null);
-      return;
-    }
+    try {
+      const uploadedImage = editor.section === "campaigns" || editor.section === "outreach"
+        ? await uploadImageDataUrl(draft.image || undefined, editor.section)
+        : undefined;
 
-    setContent((prev) => {
-      switch (editor.section) {
-        case "roadmap":
-          return {
-            ...prev,
-            roadmap: updateAt(prev.roadmap, editor.index, (item) => ({
-              ...item,
-              task: draft.task ?? "",
-              desc: draft.desc ?? "",
-              unit: draft.unit ?? "",
-            })),
-          };
-        case "campaigns":
-          return {
-            ...prev,
-            campaigns: updateAt(prev.campaigns, editor.index, (item) => ({
-              ...item,
-              label: draft.label ?? "",
-              copy: draft.copy ?? "",
-              image: draft.image || undefined,
-            })),
-          };
-        case "whatsapp":
-          return {
-            ...prev,
-            quickReplies: updateAt(prev.quickReplies, editor.index, (item) => ({
-              ...item,
-              cmd: draft.cmd ?? "",
-              reply: draft.reply ?? "",
-            })),
-          };
-        case "win-back":
-          return {
-            ...prev,
-            winBack: updateAt(prev.winBack, editor.index, (item) => ({
-              ...item,
-              name: draft.name ?? "",
-              copy: draft.copy ?? "",
-            })),
-          };
-        case "articles":
-          return { ...prev, articles: updateAt(prev.articles, editor.index, () => draft.title ?? "") };
-        case "seo":
-          return {
-            ...prev,
-            seo: updateAt(prev.seo, editor.index, (item) => ({
-              ...item,
-              page: draft.page ?? "",
-              title: draft.title ?? "",
-              desc: draft.desc ?? "",
-            })),
-          };
-        case "about":
-          return { ...prev, founderStory: draft.founderStory ?? "", pressKitUrl: draft.pressKitUrl ?? "" };
-        case "outreach":
-          return {
-            ...prev,
-            outreach: updateAt(prev.outreach, editor.index, (item) => ({
-              ...item,
-              kind: draft.kind ?? "",
-              subject: draft.subject ?? "",
-              body: draft.body ?? "",
-              image: draft.image || undefined,
-            })),
-          };
-        case "as-seen-in":
-          return {
-            ...prev,
-            asSeenIn: updateAt(prev.asSeenIn, editor.index, (item) => ({
-              ...item,
-              name: draft.name ?? "",
-              copy: draft.copy ?? "",
-            })),
-          };
-        case "results":
-          return {
-            ...prev,
-            results: updateAt(prev.results, editor.index, (item) => ({
-              ...item,
-              measure: draft.measure ?? "",
-              start: draft.start ?? "",
-              end: draft.end ?? "",
-            })),
-          };
+      if (editor.mode === "add") {
+        setContent((prev) => {
+          switch (editor.section) {
+            case "roadmap":
+              return { ...prev, roadmap: [...prev.roadmap, { n: Math.max(0, ...prev.roadmap.map((item) => item.n)) + 1, task: draft.task ?? "", desc: draft.desc ?? "", unit: draft.unit ?? "" }] };
+            case "campaigns":
+              return { ...prev, campaigns: [...prev.campaigns, { label: draft.label ?? "New campaign", copy: draft.copy ?? "", image: uploadedImage }] };
+            case "whatsapp":
+              return { ...prev, quickReplies: [...prev.quickReplies, { cmd: draft.cmd ?? "/new", reply: draft.reply ?? "" }] };
+            case "win-back":
+              return { ...prev, winBack: [...prev.winBack, { name: draft.name ?? "New post", copy: draft.copy ?? "" }] };
+            case "articles":
+              return { ...prev, articles: [...prev.articles, draft.title ?? "New article"] };
+            case "seo":
+              return { ...prev, seo: [...prev.seo, { page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "", copy: true }] };
+            case "outreach":
+              return { ...prev, outreach: [...prev.outreach, { kind: draft.kind ?? "New message", subject: draft.subject ?? "", body: draft.body ?? "", image: uploadedImage }] };
+            case "as-seen-in":
+              return { ...prev, asSeenIn: [...prev.asSeenIn, { name: draft.name ?? "New asset", copy: draft.copy ?? "" }] };
+            case "results":
+              return { ...prev, results: [...prev.results, { measure: draft.measure ?? "", start: draft.start ?? "", end: draft.end ?? "" }] };
+            case "about":
+              return prev;
+          }
+        });
+      } else {
+        setContent((prev) => {
+          switch (editor.section) {
+            case "roadmap":
+              return { ...prev, roadmap: updateAt(prev.roadmap, editor.index, (item) => ({ ...item, task: draft.task ?? "", desc: draft.desc ?? "", unit: draft.unit ?? "" })) };
+            case "campaigns":
+              return { ...prev, campaigns: updateAt(prev.campaigns, editor.index, (item) => ({ ...item, label: draft.label ?? "", copy: draft.copy ?? "", image: uploadedImage })) };
+            case "whatsapp":
+              return { ...prev, quickReplies: updateAt(prev.quickReplies, editor.index, (item) => ({ ...item, cmd: draft.cmd ?? "", reply: draft.reply ?? "" })) };
+            case "win-back":
+              return { ...prev, winBack: updateAt(prev.winBack, editor.index, (item) => ({ ...item, name: draft.name ?? "", copy: draft.copy ?? "" })) };
+            case "articles":
+              return { ...prev, articles: updateAt(prev.articles, editor.index, () => draft.title ?? "") };
+            case "seo":
+              return { ...prev, seo: updateAt(prev.seo, editor.index, (item) => ({ ...item, page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "" })) };
+            case "about":
+              return { ...prev, founderStory: draft.founderStory ?? "", pressKitUrl: draft.pressKitUrl ?? "" };
+            case "outreach":
+              return { ...prev, outreach: updateAt(prev.outreach, editor.index, (item) => ({ ...item, kind: draft.kind ?? "", subject: draft.subject ?? "", body: draft.body ?? "", image: uploadedImage })) };
+            case "as-seen-in":
+              return { ...prev, asSeenIn: updateAt(prev.asSeenIn, editor.index, (item) => ({ ...item, name: draft.name ?? "", copy: draft.copy ?? "" })) };
+            case "results":
+              return { ...prev, results: updateAt(prev.results, editor.index, (item) => ({ ...item, measure: draft.measure ?? "", start: draft.start ?? "", end: draft.end ?? "" })) };
+          }
+        });
       }
-    });
-    setEditor(null);
+      setEditor(null);
+    } catch (saveError: unknown) {
+      setEditorError(saveError instanceof Error ? saveError.message : "Unable to upload the image.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const deleteEditorItem = () => {
@@ -827,7 +758,7 @@ function DashboardWorkspace({ user }: { user: User }) {
 
             {/* Campaigns: Drop kit */}
             <Panel id="campaigns" title="Drop campaign kit" onAdd={() => openEditor("campaigns")} className="lg:col-span-2">
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {content.campaigns.map(({ label, copy, image }, index) => (
                   <MediaCard
                     key={label}
@@ -1000,7 +931,7 @@ function DashboardWorkspace({ user }: { user: User }) {
 
             {/* Outreach */}
             <Panel id="outreach" title="Outreach" onAdd={() => openEditor("outreach")} className="lg:col-span-2">
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {content.outreach.map(({ kind, subject, body, image }, index) => (
                   <MediaCard
                     key={kind}
@@ -1094,7 +1025,14 @@ function DashboardWorkspace({ user }: { user: User }) {
               {editor ? `${editor.mode === "add" ? "Add" : "Edit"} ${editorTitles[editor.section]}` : "Edit content"}
             </SheetTitle>
           </SheetHeader>
-          <div className="flex-1 overflow-y-auto px-6 py-6">{renderEditorForm()}</div>
+          <div className="flex-1 overflow-y-auto px-6 py-6">
+            {editorError ? (
+              <div className="mb-5 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+                {editorError}
+              </div>
+            ) : null}
+            {renderEditorForm()}
+          </div>
           <SheetFooter className="border-t border-border px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
             {editor?.mode === "edit" && editor.section !== "about" ? (
               <Button type="button" variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
@@ -1107,8 +1045,8 @@ function DashboardWorkspace({ user }: { user: User }) {
                 Cancel
               </Button>
               <Button type="button" onClick={saveEditor} disabled={!editor}>
-                Save changes
-              </Button>
+              {saving ? "Uploading…" : "Save changes"}
+            </Button>
             </div>
           </SheetFooter>
         </SheetContent>

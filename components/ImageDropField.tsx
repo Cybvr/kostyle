@@ -5,7 +5,7 @@ import { ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-/** Click-or-drag image upload field. Reads the file as a data URL and hands it back via onChange. */
+/** Click-or-drag image upload field. Keeps a local preview; the editor uploads the file to Firebase Storage on save. */
 export function ImageDropField({
   value,
   onChange,
