@@ -132,9 +132,13 @@ export const SEO_ROWS: ReadonlyArray<SeoRow> = [
 ];
 
 export const FOUNDER_STORY =
-  "Kostyle began with a simple frustration: Ali Hamze wanted boxing and training wear that could handle hard sessions, fit properly, and still look right outside the gym. After years of training in pieces that wore out quickly or were not built for the demands of the ring, he started developing a better local alternative in Dubai. The brand is built around durable materials, practical cuts, and a straightforward belief that athletes should not have to choose between performance and style. What started as a response to a gap in his own kit has grown into a homegrown label making hoodies, shorts, and tees for people who train seriously and live actively.";
+  "KOStyle began with a simple frustration: Ali Hamze wanted boxing gloves and training equipment that could handle hard sessions, protect the hands properly, and still look right outside the gym. After years of training with gear that wore out quickly or was not built for the demands of the ring, he started developing a better local alternative in Dubai. The brand is built around durable materials, practical performance, and a straightforward belief that athletes should not have to choose between protection and style. What started as a response to a gap in his own kit has grown into a homegrown boxing brand for people who train seriously and live actively.";
 
 export const PRESS_KIT_URL = "http://kostyle.ae/presskit";
+export const COMPANY = "KOStyle";
+export const WHAT_WE_DO = "We make durable boxing gloves and fight-training equipment for people who train seriously, from first sessions to competition.";
+export const CAMPAIGN_IDEA = "Built for the rounds: show the gloves in real training, explain the protection and fit, and turn each colourway into a reason to step into the gym.";
+export const LOCATIONS = "Dubai, UAE · serving customers across the UAE";
 
 export type OutreachMessage = { kind: string; subject: string; body: string; image?: string };
 
@@ -175,6 +179,10 @@ export type EditableContent = {
   winBack: NamedCopy[];
   articles: Article[];
   seo: SeoRow[];
+  company: string;
+  whatWeDo: string;
+  campaignIdea: string;
+  locations: string;
   founderStory: string;
   pressKitUrl: string;
   outreach: OutreachMessage[];
@@ -190,6 +198,10 @@ export const INITIAL_CONTENT: EditableContent = {
   winBack: WIN_BACK.map((item) => ({ ...item })),
   articles: ARTICLES.map((item) => ({ ...item, tags: [...item.tags] })),
   seo: SEO_ROWS.map((item) => ({ ...item })),
+  company: COMPANY,
+  whatWeDo: WHAT_WE_DO,
+  campaignIdea: CAMPAIGN_IDEA,
+  locations: LOCATIONS,
   founderStory: FOUNDER_STORY,
   pressKitUrl: PRESS_KIT_URL,
   outreach: OUTREACH.map((item) => ({ ...item })),

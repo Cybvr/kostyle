@@ -113,7 +113,14 @@ function getDraft(content: EditableContent, section: EditorSection, index: numbe
       return { page: item.page, title: item.title, desc: item.desc };
     }
     case "about":
-      return { founderStory: content.founderStory, pressKitUrl: content.pressKitUrl };
+      return {
+        company: content.company,
+        whatWeDo: content.whatWeDo,
+        campaignIdea: content.campaignIdea,
+        locations: content.locations,
+        founderStory: content.founderStory,
+        pressKitUrl: content.pressKitUrl,
+      };
     case "outreach": {
       const item = content.outreach[index];
       return { kind: item.kind, subject: item.subject, body: item.body, image: item.image ?? "" };
@@ -144,7 +151,14 @@ function getBlankDraft(content: EditableContent, section: EditorSection): Editor
     case "seo":
       return { page: "", title: "", desc: "" };
     case "about":
-      return { founderStory: content.founderStory, pressKitUrl: content.pressKitUrl };
+      return {
+        company: content.company,
+        whatWeDo: content.whatWeDo,
+        campaignIdea: content.campaignIdea,
+        locations: content.locations,
+        founderStory: content.founderStory,
+        pressKitUrl: content.pressKitUrl,
+      };
     case "outreach":
       return { kind: "New message", subject: "", body: "", image: "" };
     case "as-seen-in":
@@ -443,6 +457,13 @@ function DashboardWorkspace({ user }: { user: User }) {
           section: editor.section,
           instruction: generatePrompt.trim(),
           draft,
+          context: {
+            company: content.company,
+            whatWeDo: content.whatWeDo,
+            campaignIdea: content.campaignIdea,
+            locations: content.locations,
+            founderStory: content.founderStory,
+          },
         }),
       });
       const payload = await response.json() as { fields?: Record<string, string>; error?: string };
@@ -568,7 +589,15 @@ function DashboardWorkspace({ user }: { user: User }) {
             case "seo":
               return { ...prev, seo: updateAt(prev.seo, editor.index, (item) => ({ ...item, page: draft.page ?? "", title: draft.title ?? "", desc: draft.desc ?? "" })) };
             case "about":
-              return { ...prev, founderStory: draft.founderStory ?? "", pressKitUrl: draft.pressKitUrl ?? "" };
+              return {
+                ...prev,
+                company: draft.company ?? "",
+                whatWeDo: draft.whatWeDo ?? "",
+                campaignIdea: draft.campaignIdea ?? "",
+                locations: draft.locations ?? "",
+                founderStory: draft.founderStory ?? "",
+                pressKitUrl: draft.pressKitUrl ?? "",
+              };
             case "outreach":
               return { ...prev, outreach: updateAt(prev.outreach, editor.index, (item) => ({ ...item, kind: draft.kind ?? "", subject: draft.subject ?? "", body: draft.body ?? "", image: uploadedImage })) };
             case "as-seen-in":
@@ -625,7 +654,7 @@ function DashboardWorkspace({ user }: { user: User }) {
         "win-back": content.winBack.map((item) => item.name),
         articles: content.articles.map((item) => item.title),
         seo: content.seo.map((item) => item.page),
-        about: ["Founder story + press kit"],
+        about: ["Company + brand context"],
         outreach: content.outreach.map((item) => item.kind),
         "as-seen-in": content.asSeenIn.map((item) => item.name),
         results: content.results.map((item) => item.measure),
@@ -782,6 +811,18 @@ function DashboardWorkspace({ user }: { user: User }) {
       case "about":
         return (
           <div className="space-y-5">
+            <EditorField label="Company" htmlFor="editor-company">
+              <Input id="editor-company" value={draft.company ?? ""} onChange={(event) => updateDraft("company", event.target.value)} />
+            </EditorField>
+            <EditorField label="What we do" htmlFor="editor-what-we-do">
+              <Textarea id="editor-what-we-do" className="min-h-24" value={draft.whatWeDo ?? ""} onChange={(event) => updateDraft("whatWeDo", event.target.value)} />
+            </EditorField>
+            <EditorField label="Campaign idea" htmlFor="editor-campaign-idea">
+              <Textarea id="editor-campaign-idea" className="min-h-24" value={draft.campaignIdea ?? ""} onChange={(event) => updateDraft("campaignIdea", event.target.value)} />
+            </EditorField>
+            <EditorField label="Locations" htmlFor="editor-locations">
+              <Input id="editor-locations" value={draft.locations ?? ""} onChange={(event) => updateDraft("locations", event.target.value)} />
+            </EditorField>
             <EditorField label="Founder story" htmlFor="editor-founder-story">
               <Textarea id="editor-founder-story" className="min-h-56" value={draft.founderStory ?? ""} onChange={(event) => updateDraft("founderStory", event.target.value)} />
             </EditorField>
@@ -1100,7 +1141,7 @@ function DashboardWorkspace({ user }: { user: User }) {
               </Table>
             </Panel>
 
-            {/* About: founder story + press kit */}
+            {/* About: brand context + founder story + press kit */}
             <Panel
               id="about"
               title="About"
@@ -1112,32 +1153,60 @@ function DashboardWorkspace({ user }: { user: User }) {
               }
               className="lg:col-span-2"
             >
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
-                <div>
-                  <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
-                    Founder story
-                  </h3>
-                  <CopyBox value={content.founderStory} />
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div className="space-y-5">
+                  <div>
+                    <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                      Company
+                    </h3>
+                    <CopyBox value={content.company} />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                      What we do
+                    </h3>
+                    <CopyBox value={content.whatWeDo} />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                      Campaign idea
+                    </h3>
+                    <CopyBox value={content.campaignIdea} />
+                  </div>
                 </div>
-                <div>
-                  <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
-                    Press kit
-                  </h3>
-                  <Button asChild variant="outline" className="mb-3 w-full">
-                    <a href={content.pressKitUrl} target="_blank" rel="noreferrer">
-                      Open press kit
-                    </a>
-                  </Button>
-                  <CopyBox value={content.pressKitUrl}>
-                    <a
-                      href={content.pressKitUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="break-all underline underline-offset-4 hover:text-accent"
-                    >
-                      {content.pressKitUrl}
-                    </a>
-                  </CopyBox>
+                <div className="space-y-5">
+                  <div>
+                    <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                      Locations
+                    </h3>
+                    <CopyBox value={content.locations} />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                      Founder story
+                    </h3>
+                    <CopyBox value={content.founderStory} />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 font-heading text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+                      Press kit
+                    </h3>
+                    <Button asChild variant="outline" className="mb-3 w-full">
+                      <a href={content.pressKitUrl} target="_blank" rel="noreferrer">
+                        Open press kit
+                      </a>
+                    </Button>
+                    <CopyBox value={content.pressKitUrl}>
+                      <a
+                        href={content.pressKitUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="break-all underline underline-offset-4 hover:text-accent"
+                      >
+                        {content.pressKitUrl}
+                      </a>
+                    </CopyBox>
+                  </div>
                 </div>
               </div>
             </Panel>

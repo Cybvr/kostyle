@@ -89,6 +89,10 @@ function normalizeArticles(value: unknown): Article[] | null {
 
 function mergeContent(value: Record<string, unknown>): EditableContent {
   const quickReplies = normalizeQuickReplies(value.quickReplies);
+  const savedFounderStory = typeof value.founderStory === "string" ? value.founderStory : "";
+  const founderStory = /hoodies, shorts, and tees/i.test(savedFounderStory)
+    ? INITIAL_CONTENT.founderStory
+    : savedFounderStory || INITIAL_CONTENT.founderStory;
 
   return {
     ...INITIAL_CONTENT,
@@ -99,6 +103,12 @@ function mergeContent(value: Record<string, unknown>): EditableContent {
     winBack: Array.isArray(value.winBack) ? value.winBack : INITIAL_CONTENT.winBack,
     articles: normalizeArticles(value.articles) ?? INITIAL_CONTENT.articles,
     seo: Array.isArray(value.seo) ? value.seo : INITIAL_CONTENT.seo,
+    company: typeof value.company === "string" ? value.company : INITIAL_CONTENT.company,
+    whatWeDo: typeof value.whatWeDo === "string" ? value.whatWeDo : INITIAL_CONTENT.whatWeDo,
+    campaignIdea: typeof value.campaignIdea === "string" ? value.campaignIdea : INITIAL_CONTENT.campaignIdea,
+    locations: typeof value.locations === "string" ? value.locations : INITIAL_CONTENT.locations,
+    founderStory,
+    pressKitUrl: typeof value.pressKitUrl === "string" ? value.pressKitUrl : INITIAL_CONTENT.pressKitUrl,
     outreach: Array.isArray(value.outreach) ? value.outreach : INITIAL_CONTENT.outreach,
     asSeenIn: Array.isArray(value.asSeenIn) ? value.asSeenIn : INITIAL_CONTENT.asSeenIn,
     results: Array.isArray(value.results) ? value.results : INITIAL_CONTENT.results,

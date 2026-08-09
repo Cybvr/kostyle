@@ -103,6 +103,7 @@ export async function POST(request: Request) {
       section?: GenerateSection;
       instruction?: string;
       draft?: Record<string, string>;
+      context?: Record<string, string>;
     };
     const section = body.section;
     if (!section || !(section in FIELD_DESCRIPTIONS)) {
@@ -140,6 +141,7 @@ export async function POST(request: Request) {
                 section,
                 instruction,
                 currentDraft: body.draft ?? {},
+                brandContext: body.context ?? {},
                 fields,
               }),
             }],
