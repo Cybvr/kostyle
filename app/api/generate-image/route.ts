@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         prompt,
-        image_size: "auto_2K",
+        image_size: "square_hd",
         sync_mode: true,
         enable_safety_checker: true,
       }),

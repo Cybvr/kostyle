@@ -497,10 +497,15 @@ function DashboardWorkspace({ user }: { user: User }) {
     setGeneratingImageSection(section);
     setEditorError(null);
 
+    const aboutContext = [content.company, content.whatWeDo, content.campaignIdea, content.locations, content.founderStory]
+      .filter(Boolean)
+      .join(" ");
+    const visualDirection = `Create a finished sports social media graphic for KOStyle, a boxing-glove and fight-training equipment brand in the UAE. Use the supplied visual reference as direction: bold editorial sports posters, dramatic athlete portraits and action crops, modular collage or grid layouts, strong color blocking, matchday energy, oversized modern typography, and crisp social-first composition. Keep the image dark, grungy, candid, and cinematic, with real boxers visibly in the shot, textured shadows, natural motion, and a premium documentary feel. Include one large, bold, highly legible headline using the exact supplied headline text. Keep the headline integrated into the design, use only a small amount of supporting text, and avoid invented sponsor marks, logos, watermarks, or unrelated sports. Make the boxer, graphic treatment, and headline directly relevant to this KOStyle About context: ${aboutContext}`;
+
     const promptBySection: Record<ImageSection, string> = {
-      campaigns: `Create a premium editorial campaign image for KOStyle, a boxing-glove and fight-training equipment brand in the UAE. Visual direction: charcoal and cream, high-contrast monochrome risograph texture, bold graphic composition, tactile paper grain, strong negative space, no visible words, no logos, no watermark. Campaign context: ${draft.label || "boxing training campaign"}. ${draft.copy || ""}`,
-      articles: `Create a premium editorial image for a KOStyle boxing-glove buying guide. Visual direction: charcoal and cream, high-contrast monochrome risograph texture, tactile paper grain, documentary sports editorial composition, no visible words, no logos, no watermark. Article title: ${draft.title || "boxing glove training guide"}. ${draft.excerpt || ""}`,
-      outreach: `Create a premium editorial image for KOStyle, a boxing-glove and fight-training equipment brand. Visual direction: charcoal and cream, high-contrast monochrome risograph texture, bold but restrained sports editorial composition, no visible words, no logos, no watermark. Outreach subject: ${draft.subject || "brand story"}. ${draft.body || ""}`,
+      campaigns: `${visualDirection} Campaign headline: "${draft.label || "KOStyle boxing campaign"}". Campaign context: ${draft.copy || ""}`,
+      articles: `${visualDirection} Article headline: "${draft.title || "Boxing glove training guide"}". Article context: ${draft.excerpt || ""}`,
+      outreach: `${visualDirection} Outreach headline: "${draft.subject || "KOStyle"}". Outreach context: ${draft.body || ""}`,
     };
 
     try {
