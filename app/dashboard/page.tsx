@@ -225,26 +225,30 @@ function EditableTemplate({
   onEdit: () => void;
 }) {
   return (
-    <div
+    <TableRow
       role="button"
       tabIndex={0}
       onClick={onEdit}
-      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown={(event: KeyboardEvent<HTMLTableRowElement>) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           onEdit();
         }
       }}
-      className="flex cursor-pointer items-start gap-4 px-4 py-4 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+      className="cursor-pointer border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
     >
-      <div className="min-w-0 flex-1">
-        <p className="font-heading text-sm font-semibold tracking-tight text-foreground">{title}</p>
-        <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-foreground/80">{conversation}</p>
-      </div>
-      <div className="shrink-0 pt-0.5" onClick={(event) => event.stopPropagation()}>
-        <CopyButton value={conversation} />
-      </div>
-    </div>
+      <TableCell className="max-w-0 truncate font-semibold text-foreground" title={title}>
+        {title}
+      </TableCell>
+      <TableCell className="max-w-0 truncate text-foreground/80" title={conversation}>
+        {conversation}
+      </TableCell>
+      <TableCell className="w-16">
+        <div className="flex justify-end" onClick={(event) => event.stopPropagation()}>
+          <CopyButton value={conversation} />
+        </div>
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -382,6 +386,7 @@ function DashboardWorkspace({ user }: { user: User }) {
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const [generatePrompt, setGeneratePrompt] = useState("");
   const [generating, setGenerating] = useState(false);
+  const [generatingImageSection, setGeneratingImageSection] = useState<ImageSection | null>(null);
   const { content, setContent, error: contentError } = useWorkspaceContent();
   const profile = useUserProfile(user);
   const hydrated = useRef(false);
@@ -446,11 +451,9 @@ function DashboardWorkspace({ user }: { user: User }) {
     setEditorError(null);
 
     try {
-      const idToken = await user.getIdToken();
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${idToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -486,6 +489,34 @@ function DashboardWorkspace({ user }: { user: User }) {
       setEditorError(generateError instanceof Error ? generateError.message : "Unable to generate content.");
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const generateImage = async (section: ImageSection) => {
+    if (!editor || generatingImageSection) return;
+    setGeneratingImageSection(section);
+    setEditorError(null);
+
+    const promptBySection: Record<ImageSection, string> = {
+      campaigns: `Create a premium editorial campaign image for KOStyle, a boxing-glove and fight-training equipment brand in the UAE. Visual direction: charcoal and cream, high-contrast monochrome risograph texture, bold graphic composition, tactile paper grain, strong negative space, no visible words, no logos, no watermark. Campaign context: ${draft.label || "boxing training campaign"}. ${draft.copy || ""}`,
+      articles: `Create a premium editorial image for a KOStyle boxing-glove buying guide. Visual direction: charcoal and cream, high-contrast monochrome risograph texture, tactile paper grain, documentary sports editorial composition, no visible words, no logos, no watermark. Article title: ${draft.title || "boxing glove training guide"}. ${draft.excerpt || ""}`,
+      outreach: `Create a premium editorial image for KOStyle, a boxing-glove and fight-training equipment brand. Visual direction: charcoal and cream, high-contrast monochrome risograph texture, bold but restrained sports editorial composition, no visible words, no logos, no watermark. Outreach subject: ${draft.subject || "brand story"}. ${draft.body || ""}`,
+    };
+
+    try {
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: promptBySection[section] }),
+      });
+      const payload = await response.json() as { image?: string; error?: string };
+      if (!response.ok) throw new Error(payload.error || "Unable to generate image.");
+      if (!payload.image) throw new Error("Seedream returned no image.");
+      updateDraft("image", payload.image);
+    } catch (imageError: unknown) {
+      setEditorError(imageError instanceof Error ? imageError.message : "Unable to generate image.");
+    } finally {
+      setGeneratingImageSection(null);
     }
   };
 
@@ -727,6 +758,8 @@ function DashboardWorkspace({ user }: { user: User }) {
               <ImageDropField
                 value={draft.image || undefined}
                 onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
+                onGenerate={() => generateImage("campaigns")}
+                generating={generatingImageSection === "campaigns"}
               />
             </EditorField>
             {itemPicker}
@@ -769,6 +802,8 @@ function DashboardWorkspace({ user }: { user: User }) {
               <ImageDropField
                 value={draft.image || undefined}
                 onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
+                onGenerate={() => generateImage("articles")}
+                generating={generatingImageSection === "articles"}
               />
             </EditorField>
             {itemPicker}
@@ -848,6 +883,8 @@ function DashboardWorkspace({ user }: { user: User }) {
               <ImageDropField
                 value={draft.image || undefined}
                 onChange={(dataUrl) => updateDraft("image", dataUrl ?? "")}
+                onGenerate={() => generateImage("outreach")}
+                generating={generatingImageSection === "outreach"}
               />
             </EditorField>
             {itemPicker}
@@ -1042,16 +1079,27 @@ function DashboardWorkspace({ user }: { user: User }) {
               </h3>
               <div className="overflow-hidden rounded-lg border border-border">
                 {content.quickReplies.length > 0 ? (
-                  <div className="divide-y divide-border">
-                    {content.quickReplies.map(({ title, conversation }, index) => (
-                      <EditableTemplate
-                        key={`${title}-${index}`}
-                        title={title}
-                        conversation={conversation}
-                        onEdit={() => openEditor("whatsapp", index, "edit")}
-                      />
-                    ))}
-                  </div>
+                  <Table className="table-fixed text-sm">
+                    <TableHeader>
+                      <TableRow className="border-b-2 border-border hover:bg-transparent">
+                        <TableHead className={cn(thCls, "w-1/4")}>Template</TableHead>
+                        <TableHead className={thCls}>Response</TableHead>
+                        <TableHead className="w-16">
+                          <span className="sr-only">Actions</span>
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {content.quickReplies.map(({ title, conversation }, index) => (
+                        <EditableTemplate
+                          key={`${title}-${index}`}
+                          title={title}
+                          conversation={conversation}
+                          onEdit={() => openEditor("whatsapp", index, "edit")}
+                        />
+                      ))}
+                    </TableBody>
+                  </Table>
                 ) : (
                   <p className="px-4 py-6 text-sm text-muted-foreground">No response templates yet. Add one to build the ordering flow.</p>
                 )}
@@ -1349,7 +1397,7 @@ function DashboardWorkspace({ user }: { user: User }) {
                 {editorError}
               </div>
             ) : null}
-            {editor ? (
+            {editor?.mode === "add" ? (
               <div className="mb-6 rounded-lg border border-accent/30 bg-accent/5 p-4">
                 <div className="flex items-center gap-2 font-heading text-sm font-semibold text-foreground">
                   <Sparkles className="size-4 text-accent" aria-hidden="true" />

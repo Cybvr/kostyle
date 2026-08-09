@@ -1,6 +1,7 @@
-import { cert, getApps, initializeApp } from "firebase-admin/app";
-import { getAuth } from "firebase-admin/auth";
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 type GenerateSection =
   | "roadmap"
@@ -62,22 +63,6 @@ const FIELD_DESCRIPTIONS: Record<GenerateSection, Record<string, string>> = {
   },
 };
 
-function getAdminAuth() {
-  const projectId = process.env.FIREBASE_PROJECT_ID ?? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error("Firebase Admin credentials are not configured.");
-  }
-
-  const app = getApps()[0] ?? initializeApp({
-    credential: cert({ projectId, clientEmail, privateKey }),
-  });
-
-  return getAuth(app);
-}
-
 function getOutputText(response: { output?: Array<{ content?: Array<{ type?: string; text?: string }> }> }) {
   return (response.output ?? [])
     .flatMap((item) => item.content ?? [])
@@ -92,12 +77,6 @@ export async function POST(request: Request) {
     if (!apiKey) {
       return NextResponse.json({ error: "Add OPENAI_API_KEY to the server environment first." }, { status: 503 });
     }
-
-    const authorization = request.headers.get("authorization");
-    const token = authorization?.startsWith("Bearer ") ? authorization.slice(7) : "";
-    if (!token) return NextResponse.json({ error: "You must be signed in to generate content." }, { status: 401 });
-
-    await getAdminAuth().verifyIdToken(token);
 
     const body = await request.json() as {
       section?: GenerateSection;
